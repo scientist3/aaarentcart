@@ -1,7 +1,7 @@
 /*  Created On  : 22-Feb
 	Creadted By : Aamir
 	Index Ajax File
-	This File Loads Index Page with Data Fetched From Database Using index.php File
+	This File Loads Index Page with Data Fetched From Database Using index.php File--Not Done Yet
 	
 */
 // When Document Is Ready This Code Gets Execited. It Loads Main Divs With Data
