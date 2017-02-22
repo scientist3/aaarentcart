@@ -34,7 +34,7 @@ function validate(){
 	
 	
 		
-	xmlhttp.open('POST', 'update.php');
+	xmlhttp.open('POST', 'process.php');
 	xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	xmlhttp.send(par);
 }

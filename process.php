@@ -1,10 +1,37 @@
 <?php
-$db_host="";
-$db_username="";
-$db_password="";
-$db_databasename="";
-
-if (isset($_POST['pTitle'])) 
+	session_start();
+	// Database Conection Variables
+	$host="127.0.0.1";
+	$dbUsername="rentalkart";
+	$dbPassword="rentalkart";
+	$dbName="db_rentalkart";
+	
+	// If User Details Is Needed
+	if(isset($_REQUEST['userName'])){
+		if(isset($_SESSION['user'])){
+			echo'<div id="welcomeLine" class="row">
+					<div class="span6">Welcome! 
+					  <strong>
+						<span id="userNameDiv" class="userNameDiv">'.$_SESSION["user"].'</span>
+					  </strong>
+					</div>
+					<div class="span6"></div>
+				</div>';
+		}
+		else{
+			echo'<div id="welcomeLine" class="row">
+					<div class="span6">Welcome! 
+					  <strong>
+						<span id="userNameDiv" class="userNameDiv">Guesttt</span>
+					  </strong>
+					</div>
+					<div class="span6"></div>
+				</div>';
+		}
+	}
+	
+	//if Product Detail Is Uploaded
+	if (isset($_REQUEST['pTitle']))
 {
 	//echo"Sucessfull-".$_POST['pTitle'];
 	$pTitle=$_POST['pTitle'];
@@ -108,4 +135,6 @@ if (isset($_POST['pTitle']))
 </div>
 ';
 }
+
+	
 ?>
