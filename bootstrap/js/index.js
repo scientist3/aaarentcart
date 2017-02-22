@@ -29,7 +29,7 @@ function loadUserName(){
 	xmlhttp=xmlhttpget();
 	xmlhttp.onreadystatechange= function(){
 		if (xmlhttp.readyState ==4 && xmlhttp.status ==200){
-			alert(xmlhttp.responseText);
+			//alert(xmlhttp.responseText);
 			document.getElementById('userdiv').innerHTML=xmlhttp.responseText;
 		}
 	}		

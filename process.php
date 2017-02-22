@@ -1,6 +1,8 @@
 <?php
 	session_start();
 	// Database Conection Variables
+	$_SESSION['user']="Aamir";
+	
 	$host="127.0.0.1";
 	$dbUsername="rentalkart";
 	$dbPassword="rentalkart";
