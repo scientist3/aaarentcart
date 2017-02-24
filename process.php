@@ -7,34 +7,38 @@
 	$dbUsername="rentalkart";
 	$dbPassword="rentalkart";
 	$dbName="db_rentalkart";
-	
-	// If User Details Is Needed
-	if(isset($_REQUEST['userName'])){
-		if(isset($_SESSION['user'])){
-			echo'<div id="welcomeLine" class="row">
-					<div class="span6">Welcome! 
-					  <strong>
-						<span id="userNameDiv" class="userNameDiv">'.$_SESSION["user"].'</span>
-					  </strong>
-					</div>
-					<div class="span6"></div>
-				</div>';
-		}
-		else{
-			echo'<div id="welcomeLine" class="row">
-					<div class="span6">Welcome! 
-					  <strong>
-						<span id="userNameDiv" class="userNameDiv">Guesttt</span>
-					  </strong>
-					</div>
-					<div class="span6"></div>
-				</div>';
-		}
+	$con=mysqli_connect($host,$dbUsername,$dbPassword,$dbName);
+	if(!$con)
+	{
+		die("Connection Failed");
 	}
+
+// If User Details Is Needed
+if(isset($_REQUEST['userName'])){
+	if(isset($_SESSION['user'])){
+		echo'<div id="welcomeLine" class="row">`
+				<div class="span6">Welcome! 
+				  <strong>
+					<span id="userNameDiv" class="userNameDiv">'.$_SESSION["user"].'</span>
+				  </strong>
+				</div>
+				<div class="span6"></div>
+			</div>';
+	}
+	else{
+		echo'<div id="welcomeLine" class="row">
+				<div class="span6">Welcome! 
+				  <strong>
+					<span id="userNameDiv" class="userNameDiv">Guesttt</span>
+				  </strong>
+				</div>
+				<div class="span6"></div>
+			</div>';
+	}
+}
 	
-	//if Product Detail Is Uploaded
-	if (isset($_REQUEST['pTitle']))
-{
+// If Product Detail Is Uploaded
+if (isset($_REQUEST['pTitle'])){	
 	//echo"Sucessfull-".$_POST['pTitle'];
 	$pTitle=$_POST['pTitle'];
 	$pSDesc=$_POST['pSDesc'];
@@ -48,10 +52,9 @@
 	$pOther=$_POST['pOther'];
 	
 	
-	
 	echo'<div class="span9">
-    <div class="well"><h4><center>Uploaded Product Details</center></h4></div>
-	<div class="row">	  
+		  <div class="well"><h4><center>Uploaded Product Details</center></h4></div>
+			<div class="row">	  
 			<div id="gallery" class="span3">
             <a href="themes/images/products/large/f1.jpg" title="Fujifilm FinePix S2950 Digital Camera">
 				<img src="themes/images/products/large/3.jpg" style="width:100%" alt="Fujifilm FinePix S2950 Digital Camera"/>
@@ -132,11 +135,214 @@
 		</div>
           </div>
 
-	</div>
-</div>
-</div>
-';
+		</div>
+	</div>';
 }
 
+// Fetch Latest Products
+if(isset($_REQUEST['latestProducts'])){
 	
+	$sql = "SELECT p_id,p_title, p_s_desc, p_price_h,p_pic FROM `products`";
+	if($query_rundis = mysqli_query($con,$sql))	{
+		echo'<ul class="thumbnails">';	
+		while($row=mysqli_fetch_array($query_rundis)){
+			//echo $row["p_title"];
+			echo'<li class="span3">';
+				echo'<div class="thumbnail">';
+					echo'<a  href="product_details.html?pid='.$row['p_id'].'"><img src="'.$row['p_pic'].'" alt=""/></a>';
+					echo'<div class="caption">';
+						echo'<h5>'.substr($row['p_title'],0,30).'...</h5>';
+						  echo'<p>'.substr($row['p_s_desc'],0,30).'...</p>';
+						  echo'<h4 style="text-align:center"><a class="btn" href="product_details.html?pid='.$row['p_id'].'"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">'.$row['p_price_h'].'</a></h4>';
+					echo'</div>';
+				echo'</div>';
+			echo'</li>';
+		}
+		echo'</ul>';
+	}else{
+		echo'<div class="well">No Item Returned</div>';
+	}
+	//echo'Latest Products Fetched';
+}
+
+// Fetch Featured Products
+if(isset($_REQUEST['featuredProducts'])){
+	/*echo'<div class="row-fluid">
+				<div id="featured" class="carousel slide">
+				  <div class="carousel-inner">
+					<div class="item active">
+					  <ul class="thumbnails">
+						<li class="span3">
+						  <div class="thumbnail">
+							<i class="tag"></i>
+							<a href="product_details.html"><img src="themes/images/products/b1.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+						<li class="span3">
+						  <div class="thumbnail">
+						  <i class="tag"></i>
+							<a href="product_details.html"><img src="themes/images/products/b2.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+						<li class="span3">
+						  <div class="thumbnail">
+						  <i class="tag"></i>
+							<a href="product_details.html"><img src="themes/images/products/b3.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+						<li class="span3">
+						  <div class="thumbnail">
+						  <i class="tag"></i>
+							<a href="product_details.html"><img src="themes/images/products/b4.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+					  </ul>
+					</div>
+					   <div class="item">
+					  <ul class="thumbnails">
+						<li class="span3">
+						  <div class="thumbnail">
+						  <i class="tag"></i>
+							<a href="product_details.html"><img src="themes/images/products/5.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+						<li class="span3">
+						  <div class="thumbnail">
+						  <i class="tag"></i>
+							<a href="product_details.html"><img src="themes/images/products/6.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+						<li class="span3">
+						  <div class="thumbnail">
+							<a href="product_details.html"><img src="themes/images/products/7.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+						<li class="span3">
+						  <div class="thumbnail">
+							<a href="product_details.html"><img src="themes/images/products/8.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+					  </ul>
+					  </div>
+					   <div class="item">
+					  <ul class="thumbnails">
+						<li class="span3">
+						  <div class="thumbnail">
+							<a href="product_details.html"><img src="themes/images/products/9.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+						<li class="span3">
+						  <div class="thumbnail">
+							<a href="product_details.html"><img src="themes/images/products/10.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+						<li class="span3">
+						  <div class="thumbnail">
+							<a href="product_details.html"><img src="themes/images/products/11.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+						<li class="span3">
+						  <div class="thumbnail">
+							<a href="product_details.html"><img src="themes/images/products/1.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+					  </ul>
+					  </div>
+					   <div class="item">
+					  <ul class="thumbnails">
+						<li class="span3">
+						  <div class="thumbnail">
+							<a href="product_details.html"><img src="themes/images/products/2.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+						<li class="span3">
+						  <div class="thumbnail">
+							<a href="product_details.html"><img src="themes/images/products/3.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+						<li class="span3">
+						  <div class="thumbnail">
+							<a href="product_details.html"><img src="themes/images/products/4.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+						<li class="span3">
+						  <div class="thumbnail">
+							<a href="product_details.html"><img src="themes/images/products/5.jpg" alt=""></a>
+							<div class="caption">
+							  <h5>Product name</h5>
+							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+							</div>
+						  </div>
+						</li>
+					  </ul>
+					  </div>
+				  </div>
+					<a class="left carousel-control" href="#featured" data-slide="prev">‹</a>
+					<a class="right carousel-control" href="#featured" data-slide="next">›</a>
+				</div>
+			  </div>
+			';
+			*/
+			echo'<h1>featuredProducts</h1>';
+}
 ?>

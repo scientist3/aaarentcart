@@ -8,6 +8,8 @@
 $(document).ready(function(){
 	//alert("hhhhh");
 	$('.userdiv').load(loadUserName());
+	$('.featuredProducts').load(loadFeaturedProducts());
+	$('.latestProducts').load(loadLatestProducts());
 });
 
 // This Function IS Used To Check Which Ajax  Object Is Availabe The According Loads Ajax Object
@@ -22,6 +24,7 @@ function xmlhttpget(){
 		return xmlhttp;
 	}
 }
+
 // This Function return UserName If It is Set Or Return Guest ANd Loads That into userNameDiv span
 function loadUserName(){
 	//alert("Load User Name Function In Call Back Of Load userNameDiv");
@@ -38,3 +41,34 @@ function loadUserName(){
 	xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	xmlhttp.send(par);
 }
+
+function loadFeaturedProducts(){
+	alert("featuredProducts");
+	xmlhttp=xmlhttpget();
+	xmlhttp.onreadystatechange= function(){
+		if (xmlhttp.readyState ==4 && xmlhttp.status ==200){
+			//alert(xmlhttp.responseText);
+			document.getElementById('featuredProducts').innerHTML=xmlhttp.responseText;
+		}
+	}		
+	par="featuredProducts=1";
+	xmlhttp.open('POST', 'process.php');
+	xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xmlhttp.send(par);		
+}
+
+function loadLatestProducts(){
+	//alert("latestProducts");
+	xmlhttp=xmlhttpget();
+	xmlhttp.onreadystatechange= function(){
+		if (xmlhttp.readyState ==4 && xmlhttp.status ==200){
+			//alert(xmlhttp.responseText);
+			document.getElementById('latestProducts').innerHTML=xmlhttp.responseText;
+		}
+	}		
+	par="latestProducts=1";
+	xmlhttp.open('POST', 'process.php');
+	xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xmlhttp.send(par);	
+}
+
