@@ -167,7 +167,47 @@ if(isset($_REQUEST['latestProducts'])){
 
 // Fetch Featured Products
 if(isset($_REQUEST['featuredProducts'])){
-	/*echo'<div class="row-fluid">
+	$count=0;// Only Four Item Per Slide
+	$sql = "SELECT p_id,p_title, p_s_desc, p_price_h,p_pic FROM `products`";
+	if($query_rundis = mysqli_query($con,$sql))	{
+		echo'<div class="row-fluid">
+			<div id="featured" class="carousel slide">
+			  <div class="carousel-inner">
+				<div class="item active">
+					<ul class="thumbnails">';
+					
+		while($row=mysqli_fetch_array($query_rundis)){
+			//echo $row["p_title"];
+			$count++;
+			if($count>4){
+				$count=0;
+				echo'</ul>
+				</div>
+				<div class="item">
+					<ul class="thumbnails">';
+			}
+			echo'<li class="span3">
+					<div class="thumbnail">
+						<i class="tag"></i>
+						<a href="product_details.html"><img src="themes/images/products/b1.jpg" alt=""></a>
+						<div class="caption">
+						  <h5>Product name</h5>
+						  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+						</div>
+					</div>
+				</li>';
+		}
+		         echo'</ul>
+				</div>
+			  </div>
+			  <a class="left carousel-control" href="#featured" data-slide="prev">‹</a>
+			  <a class="right carousel-control" href="#featured" data-slide="next">›</a>
+		    </div>
+		    </div>';
+	}else{
+		echo'<div class="well">No Item Returned'.$count.'</div>';
+	}/*
+	echo'<div class="row-fluid">
 				<div id="featured" class="carousel slide">
 				  <div class="carousel-inner">
 					<div class="item active">
@@ -341,8 +381,7 @@ if(isset($_REQUEST['featuredProducts'])){
 					<a class="right carousel-control" href="#featured" data-slide="next">›</a>
 				</div>
 			  </div>
-			';
-			*/
-			echo'<h1>featuredProducts</h1>';
+			';*/
+	//echo'<h1>featuredProducts</h1>';
 }
 ?>

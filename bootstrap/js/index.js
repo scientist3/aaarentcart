@@ -7,9 +7,9 @@
 // When Document Is Ready This Code Gets Execited. It Loads Main Divs With Data
 $(document).ready(function(){
 	//alert("hhhhh");
-	$('.userdiv').load(loadUserName());
+	//$('.userdiv').load(loadUserName());
 	$('.featuredProducts').load(loadFeaturedProducts());
-	$('.latestProducts').load(loadLatestProducts());
+	//$('.latestProducts').load(loadLatestProducts());
 });
 
 // This Function IS Used To Check Which Ajax  Object Is Availabe The According Loads Ajax Object
