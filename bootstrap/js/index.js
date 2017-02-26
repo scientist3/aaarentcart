@@ -6,10 +6,17 @@
 */
 // When Document Is Ready This Code Gets Execited. It Loads Main Divs With Data
 $(document).ready(function(){
-	//alert("hhhhh");
-	$('.userdiv').load( loadUserName());
-	//$('.featuredProducts').load(loadFeaturedProducts());
-	//$('.latestProducts').load(loadLatestProducts());
+	
+	$.get("process.php","userName=1",function(data){
+		$('.userdiv').html(data);
+	});
+	$.get("process.php","featuredProducts=1",function(data){
+		$('.featuredProducts').html(data);
+	});
+	
+	$.get("process.php","latestProducts=1",function(data){
+		$('.latestProducts').html(data);
+	});
 });
 
 // This Function IS Used To Check Which Ajax  Object Is Availabe The According Loads Ajax Object
