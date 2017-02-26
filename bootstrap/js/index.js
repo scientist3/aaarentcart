@@ -7,8 +7,8 @@
 // When Document Is Ready This Code Gets Execited. It Loads Main Divs With Data
 $(document).ready(function(){
 	//alert("hhhhh");
-	//$('.userdiv').load(loadUserName());
-	$('.featuredProducts').load(loadFeaturedProducts());
+	$('.userdiv').load( loadUserName());
+	//$('.featuredProducts').load(loadFeaturedProducts());
 	//$('.latestProducts').load(loadLatestProducts());
 });
 
@@ -28,7 +28,6 @@ function xmlhttpget(){
 // This Function return UserName If It is Set Or Return Guest ANd Loads That into userNameDiv span
 function loadUserName(){
 	//alert("Load User Name Function In Call Back Of Load userNameDiv");
-
 	xmlhttp=xmlhttpget();
 	xmlhttp.onreadystatechange= function(){
 		if (xmlhttp.readyState ==4 && xmlhttp.status ==200){
