@@ -16,7 +16,7 @@
 // If User Details Is Needed
 if(isset($_REQUEST['userName'])){
 	if(isset($_SESSION['user'])){
-		echo'<div id="welcomeLine" class="row">`
+		echo'<div id="welcomeLine" class="row">
 				<div class="span6">Welcome! 
 				  <strong>
 					<span id="userNameDiv" class="userNameDiv">'.$_SESSION["user"].'</span>
@@ -168,7 +168,8 @@ if(isset($_REQUEST['latestProducts'])){
 // Fetch Featured Products
 if(isset($_REQUEST['featuredProducts'])){
 	$count=0;// Only Four Item Per Slide
-	$sql = "SELECT p_id,p_title, p_s_desc, p_price_h,p_pic FROM `products`";
+	//$sql = "SELECT p_id,p_title, p_s_desc, p_price_h,p_pic FROM `products`";
+	$sql = "SELECT p_id,p_title, p_s_desc, p_price_h,p_pic FROM `products` WHERE p_like>1 ORDER BY p_like DESC";
 	if($query_rundis = mysqli_query($con,$sql))	{
 		echo'<div class="row-fluid">
 			<div id="featured" class="carousel slide">
@@ -189,10 +190,10 @@ if(isset($_REQUEST['featuredProducts'])){
 			echo'<li class="span3">
 					<div class="thumbnail">
 						<i class="tag"></i>
-						<a href="product_details.html"><img src="themes/images/products/b1.jpg" alt=""></a>
+						<a  href="product_details.html?pid='.$row['p_id'].'"><img src="'.$row['p_pic'].'" alt=""/></a>
 						<div class="caption">
-						  <h5>Product name</h5>
-						  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
+						  <h5>'.substr($row['p_title'],0,30).'</h5>
+						  <h4><a class="btn" href="product_details.html?pid='.$row['p_id'].'">VIEW</a> <span class="pull-right">$222.00</span></h4>
 						</div>
 					</div>
 				</li>';
@@ -206,182 +207,111 @@ if(isset($_REQUEST['featuredProducts'])){
 		    </div>';
 	}else{
 		echo'<div class="well">No Item Returned'.$count.'</div>';
-	}/*
-	echo'<div class="row-fluid">
-				<div id="featured" class="carousel slide">
-				  <div class="carousel-inner">
-					<div class="item active">
-					  <ul class="thumbnails">
-						<li class="span3">
-						  <div class="thumbnail">
-							<i class="tag"></i>
-							<a href="product_details.html"><img src="themes/images/products/b1.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-						<li class="span3">
-						  <div class="thumbnail">
-						  <i class="tag"></i>
-							<a href="product_details.html"><img src="themes/images/products/b2.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-						<li class="span3">
-						  <div class="thumbnail">
-						  <i class="tag"></i>
-							<a href="product_details.html"><img src="themes/images/products/b3.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-						<li class="span3">
-						  <div class="thumbnail">
-						  <i class="tag"></i>
-							<a href="product_details.html"><img src="themes/images/products/b4.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-					  </ul>
-					</div>
-					   <div class="item">
-					  <ul class="thumbnails">
-						<li class="span3">
-						  <div class="thumbnail">
-						  <i class="tag"></i>
-							<a href="product_details.html"><img src="themes/images/products/5.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-						<li class="span3">
-						  <div class="thumbnail">
-						  <i class="tag"></i>
-							<a href="product_details.html"><img src="themes/images/products/6.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-						<li class="span3">
-						  <div class="thumbnail">
-							<a href="product_details.html"><img src="themes/images/products/7.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-						<li class="span3">
-						  <div class="thumbnail">
-							<a href="product_details.html"><img src="themes/images/products/8.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-					  </ul>
-					  </div>
-					   <div class="item">
-					  <ul class="thumbnails">
-						<li class="span3">
-						  <div class="thumbnail">
-							<a href="product_details.html"><img src="themes/images/products/9.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-						<li class="span3">
-						  <div class="thumbnail">
-							<a href="product_details.html"><img src="themes/images/products/10.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-						<li class="span3">
-						  <div class="thumbnail">
-							<a href="product_details.html"><img src="themes/images/products/11.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-						<li class="span3">
-						  <div class="thumbnail">
-							<a href="product_details.html"><img src="themes/images/products/1.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-					  </ul>
-					  </div>
-					   <div class="item">
-					  <ul class="thumbnails">
-						<li class="span3">
-						  <div class="thumbnail">
-							<a href="product_details.html"><img src="themes/images/products/2.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-						<li class="span3">
-						  <div class="thumbnail">
-							<a href="product_details.html"><img src="themes/images/products/3.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							  <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-						<li class="span3">
-						  <div class="thumbnail">
-							<a href="product_details.html"><img src="themes/images/products/4.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-						<li class="span3">
-						  <div class="thumbnail">
-							<a href="product_details.html"><img src="themes/images/products/5.jpg" alt=""></a>
-							<div class="caption">
-							  <h5>Product name</h5>
-							   <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-							</div>
-						  </div>
-						</li>
-					  </ul>
-					  </div>
-				  </div>
-					<a class="left carousel-control" href="#featured" data-slide="prev">‹</a>
-					<a class="right carousel-control" href="#featured" data-slide="next">›</a>
+	}
+}
+
+// Fetch Recently Rented
+if(isset($_REQUEST['recentlyRented'])){
+	$sql = "SELECT p_id,p_title, p_s_desc, p_price_h,p_pic FROM `products` WHERE `p_rented`=1 ORDER BY `p_last_rented` DESC";
+	$sql = "SELECT * FROM products,catagory WHERE products.p_catagory=catagory.c_id";
+}
+
+// Fetch Catagory
+if(isset($_REQUEST['productCatagory'])){
+	$sql = "SELECT * FROM catagory";
+	if($query_rundis = mysqli_query($con,$sql))	{
+		echo'<option value="1">All</option>';
+		while($row=mysqli_fetch_array($query_rundis)){
+			echo'<option value="'.$row['c_id'].'">'.$row['c_title'].'</option>';
+		}
+	}else{
+		echo'No Catagory Retrieved';
+	}
+}
+
+// Fetch Search Results
+if(isset($_REQUEST['searchResults'])){
+	$s=$_REQUEST['s'];
+	$c=$_REQUEST['c'];
+	echo'<ul class="breadcrumb">
+			<li><a href="index.html">Home</a> <span class="divider">/</span></li>
+			<li class="active">Best Matched Products</li>
+		</ul>';
+	if($c==1){
+		$sql = "SELECT * FROM products WHERE p_title LIKE '%$s%'";
+	}else{
+		$sql = "SELECT * FROM products WHERE p_catagory=$c AND p_title LIKE '%$s%'";
+	}
+	//echo$sql;
+	if($query_rundis = mysqli_query($con,$sql))	{
+		$rowcount=mysqli_num_rows($query_rundis);
+		echo'<h3> Products Name <small class="pull-right"> '.$rowcount.' products are available </small></h3><hr class="soft"/>';
+		echo'<p>Nowadays the lingerie industry is one of the most successful business spheres.We always stay in touch with the latest fashion tendencies - that is why our goods are so popular and we have a great number of faithful customers all over the country.</p>';
+		/*echo'<hr class="soft"/>
+			<form class="form-horizontal span6">
+				<div class="control-group">
+				  <label class="control-label alignL">Sort By </label>
+					<select>
+					  <option>Priduct name A - Z</option>
+					  <option>Priduct name Z - A</option>
+					  <option>Priduct Stoke</option>
+					  <option>Price Lowest first</option>
+					</select>
 				</div>
-			  </div>
-			';*/
-	//echo'<h1>featuredProducts</h1>';
+			  </form>';*/
+		echo'<div id="myTab" class="pull-right">
+		 <a href="#listView" data-toggle="tab"><span class="btn btn-large"><i class="icon-list"></i></span></a>
+		 <a href="#blockView" data-toggle="tab"><span class="btn btn-large btn-primary"><i class="icon-th-large"></i></span></a>
+		</div>
+		<br class="clr"/>';
+		echo'<div class="tab-content">
+			   <div class="tab-pane" id="listView">';
+			   while($row=mysqli_fetch_array($query_rundis)){
+				echo'<div class="row">	  
+				  <div class="span2"> <img src="'.$row['p_pic'].'" alt=""/> </div>
+					<div class="span4">
+						<h3>New | Available</h3>				
+						<hr class="soft"/>
+						<h5>'.substr($row['p_title'],0,30).'...</h5>
+						<p>'.substr($row['p_s_desc'],0,30).'...</p>
+						<a class="btn btn-small pull-right" href="product_details.html?pid='.$row['p_id'].'">View Details</a>
+						<br class="clr"/>
+					</div>
+					<div class="span3 alignR">
+						<form class="form-horizontal qtyFrm">
+						  <h3>&#8377; '.$row['p_price_h'].' Hourly</h3>
+						  <a href="product_details.html" class="btn btn-large btn-primary"> Add to <i class=" icon-shopping-cart"></i></a>
+						  <a href="product_details.html" class="btn btn-large"><i class="icon-zoom-in"></i></a>
+						</form>
+					</div>
+				</div><!--row End-->
+				<hr class="soft"/>
+				';
+			   }
+			  echo'</div>
+			  <div class="tab-pane  active" id="blockView">
+			     <ul class="thumbnails">';
+				 $query_rundis = mysqli_query($con,$sql);
+			     while($row=mysqli_fetch_array($query_rundis)){
+					echo'<li class="span3">
+					  <div class="thumbnail">
+						<a href="product_details.html?pid='.$row['p_id'].'"><img src="'.$row['p_pic'].'" alt=""/></a>
+						<div class="caption">
+						  <h5>'.substr($row['p_title'],0,30).'...</h5>
+						  <p>'.substr($row['p_s_desc'],0,30).'...</p>
+						   <h4 style="text-align:center"><a class="btn" href="product_details.html?pid='.$row['p_id'].'"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">&#8377; '.$row['p_price_h'].'</a></h4>
+						</div>
+					  </div>
+					</li>';
+				 }
+				 echo' </ul>
+			<hr class="soft"/>
+			</div>
+			 </div>';
+		
+		
+	}else{
+		echo'Nothing Matches';
+	}
 }
 ?>

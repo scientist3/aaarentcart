@@ -7,16 +7,11 @@
 // When Document Is Ready This Code Gets Execited. It Loads Main Divs With Data
 $(document).ready(function(){
 	
-	$.get("process.php","userName=1",function(data){
-		$('.userdiv').html(data);
-	});
-	$.get("process.php","featuredProducts=1",function(data){
-		$('.featuredProducts').html(data);
-	});
-	
-	$.get("process.php","latestProducts=1",function(data){
-		$('.latestProducts').html(data);
-	});
+	$.get("process.php","userName=1",        function(data){$('.userdiv').html(data);});
+	$.get("process.php","featuredProducts=1",function(data){$('.featuredProducts').html(data);});	
+	$.get("process.php","latestProducts=1",  function(data){$('.latestProducts').html(data);});
+	$.get("process.php","productCatagory=1", function(data){$('#productCatagory').html(data);});
+	$('#searchButton').click(function(){alert("clicked");});
 });
 
 // This Function IS Used To Check Which Ajax  Object Is Availabe The According Loads Ajax Object
@@ -78,3 +73,21 @@ function loadLatestProducts(){
 	xmlhttp.send(par);	
 }
 
+function loadSearchResults(){
+	//alert("Wait! Loading Search Results");
+	$('.sliderdiv').html("");
+	$('#searchResult').html("");
+	xmlhttp=xmlhttpget();
+	xmlhttp.onreadystatechange= function(){
+		if (xmlhttp.readyState ==4 && xmlhttp.status ==200){
+			document.getElementById('searchResult').innerHTML=xmlhttp.responseText;
+		}
+	}		
+	par="searchResults=1";
+	par+="&s="+document.getElementById('srchFld').value;
+	par+="&c="+document.getElementById('productCatagory').value;
+	//alert(par);
+	xmlhttp.open('POST', 'process.php');
+	xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xmlhttp.send(par);
+}

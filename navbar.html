@@ -7,16 +7,10 @@
 </a>
   <div class="navbar-inner">
     <a class="brand" href="index.html"><img src="themes/images/logo.png" alt="RentalKart"/></a>
-		<form class="form-inline navbar-search" method="post" action="products.html" >
-		<input id="srchFld" class="srchTxt" type="text" style="padding-left: 25px;"/>
-		  <select class="srchTxt">
-			<option value="1">All</option>
-			<option>CLOTHES </option>
-			<option>HEALTH & BEAUTY </option>
-			<option>SPORTS & LEISURE </option>
-			<option>BOOKS & ENTERTAINMENTS </option>
-		</select> 
-		  <button type="submit" id="submitButton" class="btn btn-primary">Go</button>
+	<form class="form-inline navbar-search" >
+		<input id="srchFld" class="srchTxt" type="text" onkeyup="loadSearchResults()" style="padding-left: 25px;"/>
+		  <select id="productCatagory" class="srchTxt"><!--Options Fetched From Database--></select> 
+		<input type="button" id="searchButton" class="btn btn-primary" onclick="loadSearchResults()" value="Go"></input>
     </form>
     <ul id="topMenu" class="nav pull-right">
 	 <li class=""><a href="special_offer.html">Specials Offer</a></li>
