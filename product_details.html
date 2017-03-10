@@ -33,6 +33,8 @@
 	<!-- Jquery -->
 	<script src="bootstrap/jquery/jquery.min.js" type="text/javascript"></script>
 	<script src="bootstrap/js/headSidebarFooter.js" type="text/javascript"></script>
+	<script src="bootstrap/js/productDetails.js" type="text/javascript"></script>
+	
 </head>
 <body>
 <!-- Header Start =============================================== -->
@@ -60,23 +62,21 @@
     <li><a href="products.html">Products</a> <span class="divider">/</span></li>
     <li class="active">product Details</li>
     </ul>	
-	<div class="row">	  
+	<div class="row">
+			<div class="test21"></div>
+			
 			<div id="gallery" class="span3">
-            <a href="themes/images/products/large/f1.jpg" title="Fujifilm FinePix S2950 Digital Camera">
-				<img src="themes/images/products/large/3.jpg" style="width:100%" alt="Fujifilm FinePix S2950 Digital Camera"/>
+            <a id="pPicA" href="bootstrap/img/loading1.gif" title="">
+				<img id="pPicI" src="bootstrap/img/loading1.gif" style="width:100%" alt=""/>
             </a>
 			<div id="differentview" class="moreOptopm carousel slide">
                 <div class="carousel-inner">
                   <div class="item active">
-                   <a href="themes/images/products/large/f1.jpg"> <img style="width:29%" src="themes/images/products/large/f1.jpg" alt=""/></a>
-                   <a href="themes/images/products/large/f2.jpg"> <img style="width:29%" src="themes/images/products/large/f2.jpg" alt=""/></a>
-                   <a href="themes/images/products/large/f3.jpg" > <img style="width:29%" src="themes/images/products/large/f3.jpg" alt=""/></a>
+                   <a id="backPicA"  href="bootstrap/img/loading1.gif"> <img id="backPicI"  style="width:29%" src="bootstrap/img/loading2.gif" alt=""/></a>
+                   <a id="LsidePicA" href="bootstrap/img/loading1.gif"> <img id="LsidePicI" style="width:29%" src="bootstrap/img/loading2.gif" alt=""/></a>
+                   <a id="RsidePicA" href="bootstrap/img/loading1.gif"> <img id="RsidePicI" style="width:29%" src="bootstrap/img/loading2.gif" alt=""/></a>
                   </div>
-                  <div class="item">
-                   <a href="themes/images/products/large/f3.jpg" > <img style="width:29%" src="themes/images/products/large/f3.jpg" alt=""/></a>
-                   <a href="themes/images/products/large/f1.jpg"> <img style="width:29%" src="themes/images/products/large/f1.jpg" alt=""/></a>
-                   <a href="themes/images/products/large/f2.jpg"> <img style="width:29%" src="themes/images/products/large/f2.jpg" alt=""/></a>
-                  </div>
+                  
                 </div>
               <!--  
 			  <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
@@ -86,21 +86,20 @@
 			  
 			 <div class="btn-toolbar">
 			  <div class="btn-group">
-				<span class="btn" ><i class="icon-zoom-in"></i></span>
-				<span class="btn" ><i class="icon-thumbs-up"></i><span class="badge">5</span></span>
-				<span class="btn" ><i class="icon-thumbs-down"></i><span class="badge">5</span></span>
+				<span class="btn" ><i class="icon-thumbs-up"></i><span class="badge" id="badgeup"></span></span>
+				<span class="btn" ><i class="icon-thumbs-down"></i><span class="badge" id="badgedown"></span></span>
 			  </div>
 			</div>
 			</div>
 			<div class="span6">
-				<h3>Fujifilm FinePix S2950 Digital Camera  </h3>
-				<small>- (14MP, 18x Optical Zoom) 3-inch LCD</small>
+				<h3 id="pTitle"></h3>
+				<small id="pSDesc"></small>
 				<hr class="soft"/>
 				<form class="form-horizontal qtyFrm">
 				  <div class="control-group"><!-- DISPLAY PRICE In 3 Formats-->
-					<label class="control-label"><span>$222.00</span></label>
-					<label class="control-label"><span>$222.00</span></label>
-					<label class="control-label"><span>$222.00</span></label>
+					<label class="control-label"><small>Hourly:</small>&#8377;<span id="priceHour"></span></label>
+					<label class="control-label"><small>Daily:</small>&#8377;<span id="priceDay"></span></label>
+					<label class="control-label"><small>Weakly:</small>&#8377;<span id="priceWeak"></span></label>
 					<div class="controls">
 					  <button type="submit" class="btn btn-large btn-primary pull-right"> Add to cart <i class="icon-shopping-cart"></i></button>
 					</div>
@@ -108,12 +107,7 @@
 				</form>
 				
 				<hr class="soft clr"/>
-				<p>
-				14 Megapixels. 18.0 x Optical Zoom. 3.0-inch LCD Screen. Full HD photos and 1280 x 720p HD movie capture. ISO sensitivity ISO6400 at reduced resolution. 
-				Tracking Auto Focus. Motion Panorama Mode. Face Detection technology with Blink detection and Smile and shoot mode. 4 x AA batteries not included. WxDxH 110.2 ×81.4x73.4mm. 
-				Weight 0.341kg (excluding battery and memory card). Weight 0.437kg (including battery and memory card).
-				
-				</p>
+				<p id="pFDesc"><!--Product Full Descrition--></p>
 				<a class="btn btn-small pull-right" href="#detail">More Details</a>
 				<br class="clr"/>
 			<a href="#" name="detail"></a>
@@ -131,11 +125,10 @@
                 <table class="table table-bordered">
 				<tbody>
 				<tr class="techSpecRow"><th colspan="2">Product Details</th></tr>
-				<tr class="techSpecRow"><td class="techSpecTD1">Brand: </td><td class="techSpecTD2">Fujifilm</td></tr>
-				<tr class="techSpecRow"><td class="techSpecTD1">Model:</td><td class="techSpecTD2">FinePix S2950HD</td></tr>
-				<tr class="techSpecRow"><td class="techSpecTD1">Released on:</td><td class="techSpecTD2"> 2011-01-28</td></tr>
-				<tr class="techSpecRow"><td class="techSpecTD1">Dimensions:</td><td class="techSpecTD2"> 5.50" h x 5.50" w x 2.00" l, .75 pounds</td></tr>
-				<tr class="techSpecRow"><td class="techSpecTD1">Display size:</td><td class="techSpecTD2">3</td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Brand: </td><td class="brand"></td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Model:</td><td class="model"></td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Dimensions:</td><td class="dimen"></td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Other:</td><td class="other"></td></tr>
 				</tbody>
 				</table>
               </div>

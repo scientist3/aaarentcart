@@ -314,4 +314,47 @@ if(isset($_REQUEST['searchResults'])){
 		echo'Nothing Matches';
 	}
 }
+
+// Fetch Product Details
+if(isset($_REQUEST['productId'])){
+	$sql = "SELECT * FROM `products` WHERE p_id=".$_REQUEST['productId'];
+	//echo"Reached ".$_REQUEST['productId'];
+	if($query_rundis = mysqli_query($con,$sql))	{
+		$row=mysqli_fetch_assoc($query_rundis);	
+		echo $myJSON = '{ 	"p_id":"'.$row['p_id'].'", 
+							"p_s_desc":"'.$row['p_s_desc'].'",
+							
+							"p_price_h":"'.$row['p_price_h'].'", 
+							"p_price_d":"'.$row['p_price_d'].'", 
+							"p_price_w":"'.$row['p_price_w'].'", 
+							
+							"p_pic":"'.$row['p_pic'].'", 
+							"p_pic_back":"'.$row['p_pic_back'].'", 
+							"p_pic_lside":"'.$row['p_pic_lside'].'", 
+							"p_pic_rside":"'.$row['p_pic_rside'].'", 
+							
+							"p_discount":"'.$row['p_discount'].'", 
+							"p_f_desc":"'.$row['p_f_desc'].'", 
+							
+							"p_brand":"'.$row['p_brand'].'", 
+							"p_model":"'.$row['p_model'].'", 
+							"p_other":"'.$row['p_other'].'", 
+	
+							"p_like":"'.$row['p_like'].'", 
+							"p_dislike":"'.$row['p_like'].'", 
+							
+							
+							"p_title":"'.$row['p_title'].'"
+						}';	
+						/*, 
+							"p_size_dim":"'.$row['p_size_dim'].'", 
+							"p_upload_date":"'.$row['p_upload_date'].'",
+							"p_last_rented":"'.$row['p_last_rented'].'",
+							"p_rented":"'.$row['p_rented'].'",
+							"p_catagory":"'.$row['p_catagory'].'",
+							"sc_id":"'.$row['sc_id'].'",
+							"user_id":"'.$row['user_id'].'"*/
+	}
+}
+
 ?>
