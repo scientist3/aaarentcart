@@ -365,14 +365,51 @@ if(isset($_REQUEST['allProducts'])){
 // Sorted Fetch All Products Data for products.html page
 if(isset($_REQUEST['sortBy'])){
 	$val=$_REQUEST['sortBy'];
-	//$sql = "SELECT * FROM `products` LIMIT 0,10";
+	$sql =getSql($val);
 	//echo"Sorted Result [".$val."]";
-	echo'
-		"record":[
-			{"name":"Aamir","age":"25"},
-			{"name":"Nad","age":"20"}
-		]
-	';
+	
+	if($query_rundis = mysqli_query($con,$sql))	{
+		$res='[';
+		$count=0;
+		$last=mysqli_num_rows($query_rundis)-1;
+		//echo $last;
+		while($row=mysqli_fetch_assoc($query_rundis))
+		{	
+			if($count<$last)
+				$res=$res.'{"pid":"'.$row['p_id'].'","ptitle":"'.$row['p_title'].'"},';
+			else
+				$res=$res.'{"pid":"'.$row['p_id'].'","ptitle":"'.$row['p_title'].'"}';
+			$count++;
+		}
+		$res=$res."]";
+		echo $res;
+	}
+	
+	/*echo'
+		[ 	
+			{"name":"aamir"},
+			{"name":"Nad"}
+		]';*/
 }
-
+function getSql($sortBy){
+	$sql="";
+	switch($sortBy){
+		case "az":
+			$sql = "SELECT * FROM `products` ORDER BY `products`.`p_title` ASC";
+			break;
+		case "za":
+			$sql = "SELECT * FROM `products` ORDER BY `products`.`p_title` DESC";
+			break;
+		case "plt":
+			$sql = "SELECT * FROM `products` ORDER BY `products`.`p_like` DESC";
+			break;
+		case "plf":
+			$sql = "SELECT * FROM `products` ORDER BY `products`.`p_price_d` ASC";
+			break;
+		case "phf":
+			$sql = "SELECT * FROM `products` ORDER BY `products`.`p_price_d` DESC";
+			break;
+	}
+	return $sql;
+}
 ?>
