@@ -28,10 +28,10 @@ $(document).ready(function(){
 		
 		$('#pFDesc').html(myObj.p_f_desc);
 		
-		$('.brand').html(myObj.p_brand);
-		$('.model').html(myObj.p_model);
-		$('.dimen').html(myObj.p_size_dim);
-		$('.other').html(myObj.p_other);
+		$('.pBrand').html(myObj.p_brand);
+		$('.pModel').html(myObj.p_model);
+		$('.pDimen').html(myObj.p_size_dim);
+		$('.pOther').html(myObj.p_other);
 		$('#badgeup').html(myObj.p_like);
 		$('#badgedown').html(myObj.p_dislike);
 		

@@ -1,8 +1,8 @@
 <?php
 	session_start();
 	// Database Conection Variables
-	$_SESSION['user']="Aamir";
-	
+	//$_SESSION['user']="";
+	//session_unset();
 	$host="127.0.0.1";
 	$dbUsername="rentalkart";
 	$dbPassword="rentalkart";
@@ -355,6 +355,24 @@ if(isset($_REQUEST['productId'])){
 							"sc_id":"'.$row['sc_id'].'",
 							"user_id":"'.$row['user_id'].'"*/
 	}
+}
+
+// Fetch All Products Data for products.html page
+if(isset($_REQUEST['allProducts'])){
+	$sql = "SELECT * FROM `products` LIMIT 0,10";
+}
+
+// Sorted Fetch All Products Data for products.html page
+if(isset($_REQUEST['sortBy'])){
+	$val=$_REQUEST['sortBy'];
+	//$sql = "SELECT * FROM `products` LIMIT 0,10";
+	//echo"Sorted Result [".$val."]";
+	echo'
+		"record":[
+			{"name":"Aamir","age":"25"},
+			{"name":"Nad","age":"20"}
+		]
+	';
 }
 
 ?>

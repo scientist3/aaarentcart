@@ -10,8 +10,7 @@ $(document).ready(function(){
 	$.get("process.php","userName=1",        function(data){$('.userdiv').html(data);});
 	$.get("process.php","featuredProducts=1",function(data){$('.featuredProducts').html(data);});	
 	$.get("process.php","latestProducts=1",  function(data){$('.latestProducts').html(data);});
-	$.get("process.php","productCatagory=1", function(data){$('#productCatagory').html(data);});
-	$('#searchButton').click(function(){alert("clicked");});
+	//$('#searchButton').click(function(){alert("clicked");});
 });
 
 // This Function IS Used To Check Which Ajax  Object Is Availabe The According Loads Ajax Object
