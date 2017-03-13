@@ -58,7 +58,7 @@ function loadFeaturedProducts(){
 }
 
 function loadLatestProducts(){
-	//alert("latestProducts");
+	alert("latestProducts");
 	xmlhttp=xmlhttpget();
 	xmlhttp.onreadystatechange= function(){
 		if (xmlhttp.readyState ==4 && xmlhttp.status ==200){
@@ -72,21 +72,3 @@ function loadLatestProducts(){
 	xmlhttp.send(par);	
 }
 
-function loadSearchResults(){
-	//alert("Wait! Loading Search Results");
-	$('.sliderdiv').html("");
-	$('#searchResult').html("");
-	xmlhttp=xmlhttpget();
-	xmlhttp.onreadystatechange= function(){
-		if (xmlhttp.readyState ==4 && xmlhttp.status ==200){
-			document.getElementById('searchResult').innerHTML=xmlhttp.responseText;
-		}
-	}		
-	par="searchResults=1";
-	par+="&s="+document.getElementById('srchFld').value;
-	par+="&c="+document.getElementById('productCatagory').value;
-	//alert(par);
-	xmlhttp.open('POST', 'process.php');
-	xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	xmlhttp.send(par);
-}

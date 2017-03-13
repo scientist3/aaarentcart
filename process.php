@@ -139,11 +139,12 @@ if (isset($_REQUEST['pTitle'])){
 	</div>';
 }
 
-// Fetch Latest Products
+// [Block Wise]Fetch Latest Products
 if(isset($_REQUEST['latestProducts'])){
 	
-	$sql = "SELECT p_id,p_title, p_s_desc, p_price_h,p_pic FROM `products`";
+	$sql = "SELECT p_id,p_title, p_s_desc, p_price_h,p_pic FROM `products` ORDER BY p_title ASC";
 	if($query_rundis = mysqli_query($con,$sql))	{
+		$_SESSION['Available']=mysqli_num_rows($query_rundis);
 		echo'<ul class="thumbnails">';	
 		while($row=mysqli_fetch_array($query_rundis)){
 			//echo $row["p_title"];
@@ -163,6 +164,58 @@ if(isset($_REQUEST['latestProducts'])){
 		echo'<div class="well">No Item Returned</div>';
 	}
 	//echo'Latest Products Fetched';
+}
+
+// [ListWise] Fetch Latest Products 
+if(isset($_REQUEST['latestProductsList'])){
+	$sql = "SELECT p_id,p_title, p_s_desc, p_f_desc, p_price_h,p_pic FROM `products` ORDER BY p_title ASC";
+	//echo'reached Here';
+	if($query_rundis = mysqli_query($con,$sql))	{
+		$res='[';
+		$count=0;
+		$last=mysqli_num_rows($query_rundis)-1;
+		//echo $last;
+		while($row=mysqli_fetch_assoc($query_rundis))
+		{	
+			if($count<$last)
+				$res=$res.'{"pid":"'.$row['p_id'].'","ptitle":"'.$row['p_title'].'","ppic":"'.$row['p_pic'].'","pfdesc":"'.$row['p_f_desc'].'"},';
+			else
+				$res=$res.'{"pid":"'.$row['p_id'].'","ptitle":"'.$row['p_title'].'","ppic":"'.$row['p_pic'].'","pfdesc":"'.$row['p_f_desc'].'"}';
+			$count++;
+		}
+		$res=$res."]";
+		echo $res;
+	}	
+	/*if($query_rundis = mysqli_query($con,$sql))	{
+		$_SESSION['Available']=mysqli_num_rows($query_rundis);
+		while($row=mysqli_fetch_array($query_rundis)){
+			echo'<div class="row">	  
+					<div class="span2">
+						<img src="'.$row['p_pic'].'" alt=""/>
+					</div>
+					<div class="span4">
+						<h4>'.$row['p_title'].'</h4>
+						<hr class="soft"/>
+						<p>'.$row['p_f_desc'].'</p>
+						<a class="btn btn-small pull-right" href="product_details.html?pid='.$row['p_id'].'">View Details</a>
+						<br class="clr"/>
+					</div>
+					<div class="span3 alignR">
+					<form class="form-horizontal qtyFrm">
+					<h3>Daily: '.$row['p_price_h'].'</h3>
+					
+					  <a href="#" class="btn btn-large btn-primary"> Add to <i class=" icon-shopping-cart"></i></a>
+					  <a href="product_details.html?pid='.$row['p_id'].'" class="btn btn-large"><i class="icon-zoom-in"></i></a>
+					
+						</form>
+					</div>
+				</div>
+				<hr class="soft"/>
+			';
+		}
+	}else{
+		echo'<div class="well">No Item Returned</div>';
+	}*/
 }
 
 // Fetch Featured Products
@@ -320,8 +373,12 @@ if(isset($_REQUEST['productId'])){
 	$sql = "SELECT * FROM `products` WHERE p_id=".$_REQUEST['productId'];
 	//echo"Reached ".$_REQUEST['productId'];
 	if($query_rundis = mysqli_query($con,$sql))	{
-		$row=mysqli_fetch_assoc($query_rundis);	
-		echo $myJSON = '{ 	"p_id":"'.$row['p_id'].'", 
+		$row=mysqli_fetch_assoc($query_rundis);
+		if(mysqli_num_rows($query_rundis)<1)
+			echo '0';
+		else
+		{
+		    echo $myJSON = '{ 	"p_id":"'.$row['p_id'].'", 
 							"p_s_desc":"'.$row['p_s_desc'].'",
 							
 							"p_price_h":"'.$row['p_price_h'].'", 
@@ -342,18 +399,19 @@ if(isset($_REQUEST['productId'])){
 	
 							"p_like":"'.$row['p_like'].'", 
 							"p_dislike":"'.$row['p_like'].'", 
-							
+							"p_size_dim":"'.$row['p_size_dim'].'",
 							
 							"p_title":"'.$row['p_title'].'"
 						}';	
 						/*, 
-							"p_size_dim":"'.$row['p_size_dim'].'", 
+							 
 							"p_upload_date":"'.$row['p_upload_date'].'",
 							"p_last_rented":"'.$row['p_last_rented'].'",
 							"p_rented":"'.$row['p_rented'].'",
 							"p_catagory":"'.$row['p_catagory'].'",
 							"sc_id":"'.$row['sc_id'].'",
 							"user_id":"'.$row['user_id'].'"*/
+		}
 	}
 }
 
@@ -362,12 +420,12 @@ if(isset($_REQUEST['allProducts'])){
 	$sql = "SELECT * FROM `products` LIMIT 0,10";
 }
 
-// Sorted Fetch All Products Data for products.html page
+// [Block Wise] Sorted Fetch All Products Data for products.html page
 if(isset($_REQUEST['sortBy'])){
 	$val=$_REQUEST['sortBy'];
 	$sql =getSql($val);
 	//echo"Sorted Result [".$val."]";
-	
+	// Cancelled For A While
 	if($query_rundis = mysqli_query($con,$sql))	{
 		$res='[';
 		$count=0;
@@ -383,7 +441,28 @@ if(isset($_REQUEST['sortBy'])){
 		}
 		$res=$res."]";
 		echo $res;
-	}
+	}	
+	/*if($query_rundis = mysqli_query($con,$sql))	{
+		echo'<ul class="thumbnails">';
+		$_SESSION['Available']=mysqli_num_rows($query_rundis);
+		while($row=mysqli_fetch_array($query_rundis)){
+			//echo $row["p_title"];
+			echo'<li class="span3">';
+				echo'<div class="thumbnail">';
+					echo'<a  href="product_details.html?pid='.$row['p_id'].'"><img src="'.$row['p_pic'].'" alt=""/></a>';
+					echo'<div class="caption">';
+						echo'<h5>'.substr($row['p_title'],0,30).'...</h5>';
+						  echo'<p>'.substr($row['p_s_desc'],0,30).'...</p>';
+						  echo'<h4 style="text-align:center"><a class="btn" href="product_details.html?pid='.$row['p_id'].'"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">'.$row['p_price_h'].'</a></h4>';
+					echo'</div>';
+				echo'</div>';
+			echo'</li>';
+		}
+		echo'</ul>';
+	}else{
+		echo'<div class="well">No Item Returned</div>';
+	}*/
+
 	
 	/*echo'
 		[ 	
@@ -391,6 +470,44 @@ if(isset($_REQUEST['sortBy'])){
 			{"name":"Nad"}
 		]';*/
 }
+
+// [List Wise] Sorted Fetch All Products Data for products.html page
+if(isset($_REQUEST['sortByList'])){
+	$val=$_REQUEST['sortByList'];
+	$sql =getSql($val);
+	if($query_rundis = mysqli_query($con,$sql))	{
+		$_SESSION['Available']=mysqli_num_rows($query_rundis);
+		while($row=mysqli_fetch_array($query_rundis)){
+			echo'<div class="row">	  
+					<div class="span2">
+						<img src="'.$row['p_pic'].'" alt=""/>
+					</div>
+					<div class="span4">
+						<h4>'.$row['p_title'].'</h4>
+						<hr class="soft"/>
+						<p>'.$row['p_f_desc'].'</p>
+						<a class="btn btn-small pull-right" href="product_details.html?pid='.$row['p_id'].'">View Details</a>
+						<br class="clr"/>
+					</div>
+					<div class="span3 alignR">
+					<form class="form-horizontal qtyFrm">
+					<h3>Daily: '.$row['p_price_h'].'</h3>
+					
+					  <a href="#" class="btn btn-large btn-primary"> Add to <i class=" icon-shopping-cart"></i></a>
+					  <a href="product_details.html?pid='.$row['p_id'].'" class="btn btn-large"><i class="icon-zoom-in"></i></a>
+					
+						</form>
+					</div>
+				</div>
+				<hr class="soft"/>
+			';
+		}
+	}else{
+		echo'<div class="well">No Item Returned</div>';
+	}
+}
+
+// Gets the Sql According to user Choice of Sort
 function getSql($sortBy){
 	$sql="";
 	switch($sortBy){
@@ -411,5 +528,8 @@ function getSql($sortBy){
 			break;
 	}
 	return $sql;
+}
+if(isset($_REQUEST['productFetched'])){
+	echo $_SESSION['Available'];
 }
 ?>

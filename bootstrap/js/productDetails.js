@@ -1,43 +1,55 @@
 $(document).ready(function(){
 	var productId=getParameterByName("pid");
-	$.get("process.php","productId="+productId, function(data){
-		var myObj = JSON.parse(data);
-		$('.test2').html(data);
-		
-		$('#pTitle').html(myObj.p_title);
-		$('#pSDesc').html(myObj.p_s_desc);
-		//Full Image- Main
-		$('#pPicA').attr("href", ""+myObj.p_pic);
-		$('#pPicI').attr("src", ""+myObj.p_pic);
-		// Back Side Image
-		$('#backPicA').attr("href", ""+myObj.p_pic_back);
-		$('#backPicI').attr("src", ""+myObj.p_pic_back);
-		// Lside Image
-		$('#LsidePicA').attr("href", ""+myObj.p_pic_lside);
-		$('#LsidePicI').attr("src", ""+myObj.p_pic_lside);
-		// Rside Image
-		$('#RsidePicA').attr("href", ""+myObj.p_pic_rside);
-		$('#RsidePicI').attr("src", ""+myObj.p_pic_rside);
-		
-		$('#pPicA').attr("title", ""+myObj.p_title);
-		$('#pPicI').attr("alt", ""+myObj.p_title);
-		
-		$('#priceHour').html(myObj.p_price_h);
-		$('#priceDay').html(myObj.p_price_d);
-		$('#priceWeak').html(myObj.p_price_w);
-		
-		$('#pFDesc').html(myObj.p_f_desc);
-		
-		$('.pBrand').html(myObj.p_brand);
-		$('.pModel').html(myObj.p_model);
-		$('.pDimen').html(myObj.p_size_dim);
-		$('.pOther').html(myObj.p_other);
-		$('#badgeup').html(myObj.p_like);
-		$('#badgedown').html(myObj.p_dislike);
-		
-		
+	if(productId==null)
+	{	
+		//No product Id is Given
+		$('#productDetails').html("<div class='well'>Detail No Available Go Back</div>");
+	}
+	else{
+		$.get("process.php","productId="+productId, function(data){
+		if(data=='0')
+		{
+			$('#productDetails').html("<div class='well'>Detail No Available Go Back</div>");
+		}
+		else{
+			//alert(data);
+			var myObj = JSON.parse(data);
+			$('.test2').html(data);
+			
+			$('#pTitle').html(myObj.p_title);
+			$('#pSDesc').html(myObj.p_s_desc);
+			//Full Image- Main
+			$('#pPicA').attr("href", ""+myObj.p_pic);
+			$('#pPicI').attr("src", ""+myObj.p_pic);
+			// Back Side Image
+			$('#backPicA').attr("href", ""+myObj.p_pic_back);
+			$('#backPicI').attr("src", ""+myObj.p_pic_back);
+			// Lside Image
+			$('#LsidePicA').attr("href", ""+myObj.p_pic_lside);
+			$('#LsidePicI').attr("src", ""+myObj.p_pic_lside);
+			// Rside Image
+			$('#RsidePicA').attr("href", ""+myObj.p_pic_rside);
+			$('#RsidePicI').attr("src", ""+myObj.p_pic_rside);
+			
+			$('#pPicA').attr("title", ""+myObj.p_title);
+			$('#pPicI').attr("alt", ""+myObj.p_title);
+			
+			$('#priceHour').html(myObj.p_price_h);
+			$('#priceDay').html(myObj.p_price_d);
+			$('#priceWeak').html(myObj.p_price_w);
+			
+			$('#pFDesc').html(myObj.p_f_desc);
+			
+			$('.pBrand').html(myObj.p_brand);
+			$('.pModel').html(myObj.p_model);
+			$('.pDimen').html(myObj.p_size_dim);
+			$('.pOther').html(myObj.p_other);
+			$('#badgeup').html(myObj.p_like);
+			$('#badgedown').html(myObj.p_dislike);
+		}
 		});
 	
+	}
 });
 // Get parameter value Of The Product Id Passed Along With Query String
 function getParameterByName(name, url) {
