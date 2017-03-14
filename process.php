@@ -539,6 +539,7 @@ if(isset($_REQUEST['productFetched'])){
 if(isset($_REQUEST['signInCheck'])){
 	$email=$_REQUEST['email'];
 	$pass=$_REQUEST['pass'];
-	echo"Hi [".$email."][".$pass."]";
+	//echo"Hi [".$email."][".$pass."]";
+	echo'{"remail":"Hey '.$email.'","rpass":"Ohh '.$pass.'"}';
 }
 ?>

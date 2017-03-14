@@ -4,7 +4,10 @@ $(document).ready(function(){
 		var pass=document.getElementById('inputPassword1').value;
 		//alert($("input:text").val());
 		$.get("process.php","signInCheck=1&email="+email+"&pass="+pass,  function(data){
-			$('#errEmail').html(data);
+			var json=JSON.parse(data);
+			//$('#errEmail').html(data);
+			$('#errEmail').html(json.remail);
+			$('#errPass').html(json.rpass);			
 		});
 	});	
 });
