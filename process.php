@@ -168,9 +168,10 @@ if(isset($_REQUEST['latestProducts'])){
 
 // [ListWise] Fetch Latest Products 
 if(isset($_REQUEST['latestProductsList'])){
-	$sql = "SELECT p_id,p_title, p_s_desc, p_f_desc, p_price_h,p_pic FROM `products` ORDER BY p_title ASC";
+	$sql = "SELECT p_id,p_title, p_s_desc, p_f_desc, p_price_d,p_pic FROM `products` ORDER BY p_title ASC";
 	//echo'reached Here';
 	if($query_rundis = mysqli_query($con,$sql))	{
+		$_SESSION['Available']=mysqli_num_rows($query_rundis);
 		$res='[';
 		$count=0;
 		$last=mysqli_num_rows($query_rundis)-1;
@@ -178,9 +179,9 @@ if(isset($_REQUEST['latestProductsList'])){
 		while($row=mysqli_fetch_assoc($query_rundis))
 		{	
 			if($count<$last)
-				$res=$res.'{"pid":"'.$row['p_id'].'","ptitle":"'.$row['p_title'].'","ppic":"'.$row['p_pic'].'","pfdesc":"'.$row['p_f_desc'].'"},';
+				$res=$res.'{"pid":"'.$row['p_id'].'","ptitle":"'.$row['p_title'].'","ppic":"'.$row['p_pic'].'","pfdesc":"'.$row['p_f_desc'].'","pdprice":"'.$row['p_price_d'].'"},';
 			else
-				$res=$res.'{"pid":"'.$row['p_id'].'","ptitle":"'.$row['p_title'].'","ppic":"'.$row['p_pic'].'","pfdesc":"'.$row['p_f_desc'].'"}';
+				$res=$res.'{"pid":"'.$row['p_id'].'","ptitle":"'.$row['p_title'].'","ppic":"'.$row['p_pic'].'","pfdesc":"'.$row['p_f_desc'].'","pdprice":"'.$row['p_price_d'].'"}';
 			$count++;
 		}
 		$res=$res."]";

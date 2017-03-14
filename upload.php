@@ -34,8 +34,8 @@
 	<script src="bootstrap/jquery/jquery.min.js" type="text/javascript"></script>
 <script src="bootstrap/js/headSidebarFooter.js" type="text/javascript"></script>
 	<!--Index Page Script Ajax File-->
-	<script src="bootstrap/js/index.js" type="text/javascript"></script>	
-</head>
+	<script src="bootstrap/js/index.js" type="text/javascript"></script>
+    </head>
 <body>
 <!-- Header Start =============================================== -->
 <div id="header">
