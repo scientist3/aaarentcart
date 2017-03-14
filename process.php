@@ -540,9 +540,16 @@ if(isset($_REQUEST['signInCheck'])){
 	$email=$_REQUEST['email'];
 	$pass=$_REQUEST['pass'];
 	//echo"Hi [".$email."][".$pass."]";
-	$sql = "SELECT * FROM `customer_registration` WHERE cust_email=\"".$email."\" and cust_password=md5(".$pass.")";
+	$sql = "SELECT `cust_email`,`cust_password` FROM `customer_registration` WHERE cust_email=\"".$email."\" and cust_password=md5(".$pass.")";
 	if($query_rundis = mysqli_query($con,$sql))	{
-		echo'{"remail":"Welcome '.$email.'","rpass":"Password Matched '.$pass.'"}';
+		$row=mysqli_fetch_array($query_rundis);
+		if($row['cust_email']==$email && $row['cust_password']==md5($pass))
+		{	
+			echo'{"remail":"Welcome '.$email.'","rpass":"Password Matched '.$pass.'"}';
+		}
+		else{	
+			echo'{"remail":"Worng EmailId","rpass":"Wrong Password"}';
+		}
 	}else{	
 		echo'{"remail":"Worng EmailId","rpass":"Wrong Password"}';
 	}
