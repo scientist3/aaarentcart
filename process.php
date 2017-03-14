@@ -530,7 +530,15 @@ function getSql($sortBy){
 	}
 	return $sql;
 }
+// Return the Total Number Of Rows From Last Query
 if(isset($_REQUEST['productFetched'])){
 	echo $_SESSION['Available'];
+}
+
+// Check Whether User[Email]&[Password] Is Valid [y/n]
+if(isset($_REQUEST['signInCheck'])){
+	$email=$_REQUEST['email'];
+	$pass=$_REQUEST['pass'];
+	echo"Hi [".$email."][".$pass."]";
 }
 ?>
