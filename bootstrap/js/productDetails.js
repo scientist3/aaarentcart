@@ -1,4 +1,30 @@
 $(document).ready(function(){
+	
+	$("#kartItem").click(function(){
+		var p_ID=document.getElementById('k_pid').value;
+		//alert("qw"+x);
+		// First Check User Is Loged Inn Or Not
+		$.get("process.php","logedIn=1",        function(data){
+			var json=JSON.parse(data);
+			if(json.logedIn=="0")
+			{
+				// User Is Not Logged In
+				//location.href
+				alert("Login First Please");
+				window.location = ("login.html");
+			}
+			else
+			{
+				// User clicks on Add To Kart
+				//$('#rowContainer').html(user.php);
+				$.get("process.php","addToKart="+p_ID, function(data){
+					alert(data);
+					window.location = ("product_summary.php");
+				});
+				//window.location = ("user.php");
+			}
+		});		
+	});
 	var productId=getParameterByName("pid");
 	if(productId==null)
 	{	
@@ -35,9 +61,10 @@ $(document).ready(function(){
 			$('#pPicI').attr("alt", ""+myObj.p_title);
 			
 			$('#priceHour').html(myObj.p_price_h);
-			$('#priceDay').html(myObj.p_price_d);
+			/*$('#priceDay').html(myObj.p_price_d);
 			$('#priceWeak').html(myObj.p_price_w);
-			
+			*/
+			$('#k_pid').val(myObj.p_id);
 			$('#pFDesc').html(myObj.p_f_desc);
 			
 			$('.pBrand').html(myObj.p_brand);
@@ -46,6 +73,7 @@ $(document).ready(function(){
 			$('.pOther').html(myObj.p_other);
 			$('#badgeup').html(myObj.p_like);
 			$('#badgedown').html(myObj.p_dislike);
+			
 		}
 		});
 	
@@ -75,4 +103,12 @@ function xmlhttpget(){
 		xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
 		return xmlhttp;
 	}
+}
+
+//When User Clicks On Add To Kart
+function addToKart(){
+	var x=document.getElementById('k_pid').value;
+	//var x=document.getElementById('k_pid');
+	alert('Added'+x);
+	
 }

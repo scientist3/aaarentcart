@@ -6,18 +6,19 @@ $(document).ready(function(){
 		
 		//Block Wise - on Change
 		$.get("process.php","sortBy="+$sortby,function(data){
-			alert(data);
-			placeData(data);
+			//alert(data);
+			//placeData(data);// change to line no 26-29 
+			//$('#blockView').html(data);
 			$('#blockView').html(data);
 			$.get("process.php","productFetched=1",  function(data){$('#totalProducts').html(data);});
 			
 		});
-		//List Wsie- On Change
+		//List Wsie- On Change--- Not Done Yet
 		$.get("process.php","sortByList="+$sortby,function(data){
 			//alert(data);
 			//placeData(data);
-			$('#listView').html(data);
-			$.get("process.php","productFetched=1",  function(data){$('#totalProducts').html(data);});
+			//$('#listView').html(data);
+			//$.get("process.php","productFetched=1",  function(data){$('#totalProducts').html(data);});
 			
 		});
 	});
@@ -27,7 +28,8 @@ $(document).ready(function(){
 		$('#blockView').html(data);
 		$.get("process.php","productFetched=1",  function(data){$('#totalProducts').html(data);});
 	});
-	// List Wise - On Load
+	
+	// List Wise - On Load--- Not Done Yet
 	$.get("process.php","latestProductsList=1",  function(data){
 		//alert(data); Recieved Correctly
 		placeData(data,"list");

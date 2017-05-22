@@ -1,8 +1,37 @@
+<?php session_start();
+	$host="127.0.0.1";
+	$dbUsername="rentalkart";
+	$dbPassword="rentalkart";
+	$dbName="db_rentalkart";
+	$con=mysqli_connect($host,$dbUsername,$dbPassword,$dbName);
+	if(!$con)
+	{
+		die("Connection Failed");
+	}
+	if(!isset($_SESSION['user'])){
+		header('location:login.html');
+	}
+	if(!isset($_GET['owner']) && !isset($_GET['rentee'])){
+		die("oops No Information Available");
+	}
+	
+	if(isset($_GET['owner']))
+	{
+		$owner=$_GET['owner'];
+		$sql = "SELECT * FROM `customer_registration` WHERE `cust_id`=".$owner;
+	}
+	if(isset($_GET['rentee']))
+	{
+		$rentee=$_GET['rentee'];
+		$sql = "SELECT * FROM `customer_registration` WHERE `cust_id`=".$rentee;
+	}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Rental Kart</title>
+    <title>Online Rental Kart</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -33,7 +62,6 @@
 	<!-- Jquery -->
 	<script src="bootstrap/jquery/jquery.min.js" type="text/javascript"></script>
 	<script src="bootstrap/js/headSidebarFooter.js" type="text/javascript"></script>
-	<script src="bootstrap/js/login.js" type="text/javascript"></script>
   </head>
 <body>
 <!-- Header Start =============================================== -->
@@ -48,67 +76,59 @@
 <div id="mainBody">
   <div class="container">
 	<div class="row">
-	<!-- Sidebar ================================================== -->
-		<div class="sidebardiv"></div>
-		<div id="rowContainer" class="span9">
+<!-- Sidebar ================================================== -->
+	<div class="span3"></div>
+<!-- Sidebar end=============================================== -->
+	<div class="span9">
 		<ul class="breadcrumb">
 			<li><a href="index.html">Home</a> <span class="divider">/</span></li>
-			<li class="active">Login</li>
+			<li class="active"> <?php if(isset($_GET['rentee'])){echo'Rentee';}else{echo'Owner';}?> Information</li>
 		</ul>
-		<h3> Login</h3>	
 		<hr class="soft"/>
-		
-		<div id="rowBody" class="row">
-			<div class="span4">
-				<div class="well">
-				<h5>CREATE YOUR ACCOUNT</h5><br/>
-				Enter your e-mail address to create an account.<br/><br/><br/>
-				<form action="register.html">
-				  <div class="control-group">
-					<label class="control-label" for="inputEmail0">E-mail address</label>
-					<div class="controls">
-					  <input class="span3"  type="text" id="inputEmail0" placeholder="Email">
-					</div>
-				  </div>
-				  <div class="controls">
-				  <button id="signUpBtn" type="submit" class="btn block">Create Your Account</button>
-				  </div>
-				</form>
-			</div>
-			</div>
-			<div class="span1"> &nbsp;</div>
-			<div class="span4">
-				<div class="well">
-				<h5>ALREADY REGISTERED ?</h5>
-				<form>
-				  <div class="control-group">
-					<label class="control-label" for="inputEmail1">Email</label>
-					<div class="controls">
-					  <input class="span3"  type="text" id="inputEmail1" placeholder="Email">
-					</div>
-					<div id="errEmail"></div>
-				  </div>
-				  <div class="control-group">
-					<label class="control-label" for="inputPassword1">Password</label>
-					<div class="controls">
-					  <input type="password" class="span3"  id="inputPassword1" placeholder="Password">
-					</div>
-					<div id="errPass"></div>
-				  </div>
-				  <div class="control-group">
-					<div class="controls">
-					  <button id="signInBtn" type="button" class="btn">Sign in</button> <!--<a href="forgetpass.html">Forget password?</a>--->
-					</div>
-				  </div>
-				</form>
-			</div>
-			</div>
-		</div>	
-		
-		</div>
-	</div>
+		<?php
+		  $row=mysqli_fetch_array(mysqli_query($con,$sql));
+		  echo'<table class="table table-bordered">
+			<tbody class="well">
+				<tr><td> FName</td><td>'.$row['cust_fname'].'</td></tr>
+				<tr><td> LName</td><td>'.$row['cust_lname'].'</td></tr>
+				<tr><td> Address</td><td>'.$row['cust_address'].'</td></tr>
+				<tr><td> City</td><td>'.$row['cust_city'].'</td></tr>
+				<tr><td> State</td><td>'.$row['cust_state'].'</td></tr>
+				<tr><td> Country</td><td>'.$row['cust_country'].'</td></tr>
+				<tr><td> Pincode</td><td>'.$row['cust_pincode'].'</td></tr>
+				<tr><td> Contact Number</td><td>'.$row['cust_contactno'].'</td></tr>
+				<tr><td> Contact Email</td><td>'.$row['cust_email'].'</td></tr>
+			</tbody>
+		  </table>';
+		?>
+		<?php
+		if(isset($_GET['owner']))
+		{echo'
+		<hr class="soft"/>			
+		<h3> <center>Custom Message To Owner---Not Yet Implemented</center></h3>
+		<div class="well">
+			<form class="form-horizontal">
+			  <div class="control-group">
+				<label class="control-label" for="CustomMessage" >Message <sup>*</sup></label>
+				<div class="controls">
+					<textarea id="CustomMessage" placeholder="Type Your Message" required></textarea>
+					
+				</div>
+				<span class="err" id="errCmessage"></span>
+			  </div>
+			  
+			  <div class="control-group">
+				<div class="controls">
+					<input id="sentMsgBtn" class="btn btn-large btn-success" type="button" value="Send" onclick="alert(\'Sending To Owner\');" />
+				</div>
+			  </div>
+			</form>
+		</div>';
+		}?>
+	</div><!--span9 End--->
+	</div><!--Row End9--->
   </div>
 </div>
 <!-- MainBody End ============================= -->
 <!-- Footer ================================================================== -->
-<div class="footerdiv"></div>
+<div  class="footerdiv"></div>

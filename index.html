@@ -5,16 +5,7 @@
     <title>Online Rental Kart</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <meta name="author" content="">
-<!--Less styles -->
-   <!-- Other Less css file //different less files has different color scheam
-	<link rel="stylesheet/less" type="text/css" href="themes/less/simplex.less">
-	<link rel="stylesheet/less" type="text/css" href="themes/less/classified.less">
-	<link rel="stylesheet/less" type="text/css" href="themes/less/amelia.less">  MOVE DOWN TO activate
-	-->
-	<!--<link rel="stylesheet/less" type="text/css" href="themes/less/bootshop.less">
-	<script src="themes/js/less.js" type="text/javascript"></script> -->
-	
+    <meta name="author" content="">	
 <!-- Bootstrap style --> 
     <link id="callCss" rel="stylesheet" href="themes/bootshop/bootstrap.min.css" media="screen"/>
     <link href="themes/css/base.css" rel="stylesheet" media="screen"/>
@@ -41,7 +32,16 @@
 <!-- Header Start =============================================== -->
 <div id="header">
 	<div class="container">
-		<div id="userdiv" class="userdiv"></div>
+		<!--<div id="userdiv" class="userdiv"></div>
+		-->
+		<div id="welcomeLine" class="row">
+		  <div class="span6">Welcome! 
+			<strong>
+				<span id="userNameDiv" class="userNameDiv"></span>
+			</strong>
+		  </div>
+		  <div class="span6"></div>
+		</div>
 		<!-- Navbar ================================================== -->
 		<div class="navdiv"></div>
 	</div>
@@ -65,7 +65,7 @@
 			<h4>Latest Products </h4>
 			<div id="latestProducts" class="latestProducts"></div>
 			
-			<div class="pagination">
+			<!--<div class="pagination">
 			<ul>
 				<li><a href="#">&lsaquo;</a></li>
 				<li><a href="#">1</a></li>
@@ -74,7 +74,7 @@
 				<li><a href="#">4</a></li>
 				<li><a href="#">...</a></li>
 				<li><a href="#">&rsaquo;</a></li>
-			</ul>
+			</ul>-->
 			</div>
 		</div>	
 	</div>

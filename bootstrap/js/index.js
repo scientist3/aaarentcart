@@ -7,7 +7,7 @@
 // When Document Is Ready This Code Gets Execited. It Loads Main Divs With Data
 $(document).ready(function(){
 	
-	$.get("process.php","userName=1",        function(data){$('.userdiv').html(data);});
+	$.get("process.php","userName=1",        function(data){$('.userNameDiv').html(data);});
 	$.get("process.php","featuredProducts=1",function(data){$('.featuredProducts').html(data);});	
 	$.get("process.php","latestProducts=1",  function(data){$('.latestProducts').html(data);});
 	//$('#searchButton').click(function(){alert("clicked");});
@@ -25,6 +25,7 @@ function xmlhttpget(){
 		return xmlhttp;
 	}
 }
+// Upload Script
 function validate(){
 	//alert('Validation Of Form');
 		

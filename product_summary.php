@@ -1,3 +1,17 @@
+<?php session_start();
+	$host="127.0.0.1";
+	$dbUsername="rentalkart";
+	$dbPassword="rentalkart";
+	$dbName="db_rentalkart";
+	$con=mysqli_connect($host,$dbUsername,$dbPassword,$dbName);
+	if(!$con)
+	{
+		die("Connection Failed");
+	}
+	if(!isset($_SESSION['user'])){
+		header('location:login.html');
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -33,7 +47,9 @@
 	<!-- Jquery -->
 	<script src="bootstrap/jquery/jquery.min.js" type="text/javascript"></script>
 	<script src="bootstrap/js/headSidebarFooter.js" type="text/javascript"></script>
-</head>
+	<script src="bootstrap/js/productSummary.js" type="text/javascript"></script>
+	
+  </head>
 <body>
 <!-- Header Start =============================================== -->
 <div id="header">
@@ -44,72 +60,54 @@
 	</div>
 </div>
 <!-- Header End=================================================== -->
-<!-- Header End====================================================================== -->
 <div id="mainBody">
-<div id="searchResult" class="container">
-	<hr class="soften">
-	<h1>Visit us</h1>
-	<hr class="soften"/>	
+  <div class="container">
 	<div class="row">
-		
-		<div class="span4">
-		<h4>Contact Details</h4>
-		<p>	Safapora,<br/> Ganderbal , J&K
-			<br/><br/>
-			rentalkart00@gmail.com<br/>
-			﻿Tel 123-456-6780<br/>
-			Fax 123-456-5679<br/>
-			web:scientist.wordpress.com
-		</p>		
-		</div>
-			
-		<div class="span4">
-		<h4>Opening Hours</h4>
-			<h5> Monday - Friday</h5>
-			<p>09:00am - 09:00pm<br/><br/></p>
-			<h5>Saturday</h5>
-			<p>09:00am - 07:00pm<br/><br/></p>
-			<h5>Sunday</h5>
-			<p>12:30pm - 06:00pm<br/><br/></p>
-		</div>
-		<div class="span4">
-		<h4>Email Us</h4>
-		<form class="form-horizontal" action="mailto:ksaak33@gmail.com">
-        <fieldset>
-          <div class="control-group">
-           
-              <input type="text" placeholder="Name" class="input-xlarge"/>
-           
-          </div>
-		   <div class="control-group">
-           
-              <input type="text" placeholder="Email" class="input-xlarge"/>
-           
-          </div>
-		   <div class="control-group">
-           
-              <input type="text" placeholder="Subject" class="input-xlarge"/>
-          
-          </div>
-          <div class="control-group">
-              <textarea rows="3" id="textarea" class="input-xlarge"></textarea>
-           
-          </div>
-
-            <button class="btn btn-large" type="submit">Send Messages</button>
-
-        </fieldset>
-      </form>
-		</div>
-	</div>
-	<!--div class="row">
-	<div class="span12">
-	<iframe style="width:100%; height:300; border: 0px" scrolling="no" src="https://maps.google.co.uk/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=18+California,+Fresno,+CA,+United+States&amp;aq=0&amp;oq=18+California+united+state&amp;sll=39.9589,-120.955336&amp;sspn=0.007114,0.016512&amp;ie=UTF8&amp;hq=&amp;hnear=18,+Fresno,+California+93727,+United+States&amp;t=m&amp;ll=36.732762,-119.695787&amp;spn=0.017197,0.100336&amp;z=14&amp;output=embed"></iframe><br />
-	<small><a href="https://maps.google.co.uk/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=18+California,+Fresno,+CA,+United+States&amp;aq=0&amp;oq=18+California+united+state&amp;sll=39.9589,-120.955336&amp;sspn=0.007114,0.016512&amp;ie=UTF8&amp;hq=&amp;hnear=18,+Fresno,+California+93727,+United+States&amp;t=m&amp;ll=36.732762,-119.695787&amp;spn=0.017197,0.100336&amp;z=14" style="color:#0000FF;text-align:left">View Larger Map</a></small>
-	</div>
-	</div>
-	</div-->
+<!-- Sidebar ================================================== -->
+	<div class="sidebardiv"></div>
+<!-- Sidebar end=============================================== -->
+	<div class="span9">
+		<ul class="breadcrumb">
+			<li><a href="index.html">Home</a> <span class="divider">/</span></li>
+			<li class="active"> SHOPPING CART</li>
+		</ul>
+		<h3>  SHOPPING CART [ <small><span id="totalItemsInKart"></span> Item(s) </small>]<a href="products.html" class="btn btn-large pull-right"><i class="icon-arrow-left"></i> Continue Shopping </a></h3>	
+		<hr class="soft"/>		
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					  <th>Product</th>
+					  <th>Description</th>
+					  <th>Daily Price</th>
+					  <th>Product Detail</th>
+					  <th>Owner Detail</th>
+					  <th>Message</th>
+					  <th>Approved</th>
+				</tr>
+			</thead>
+			<tbody id="kartItem">
+				<tr><!-- Product Is Dummy Actuial Fetched from Process Page isset('kartItems')-->
+					<td> <img width="60" src="'.$row1['p_pic'].'" alt=""/></td>
+					<td>'.$row1['p_title'].'<br/>'.$row1['p_s_desc'].'</td>
+					<td>Rs '.$row1['p_price_d'].'</td>
+					<td>
+						<a class="well well-small" role="button" href="product_details.html?pid='.$row1['p_id'].'">Detail</a>
+					</td>
+					<td>
+						<a class="well well-small" role="button" href="ownerInfo.php?owner='.$row1['user_id'].'">Contact</a>
+					</td>
+					<td>
+					<a class="well well-small" role="button" href="#" onclick="alert(\'Sent\');" name="requestBtn" id="requestBtn">Request</a>
+					</td>
+					<td></>
+				</tr>
+			</tbody>
+		</table>			
+					
+	</div><!--span9 End--->
+	</div><!--Row End9--->
+  </div>
 </div>
 <!-- MainBody End ============================= -->
 <!-- Footer ================================================================== -->
-<div class="footerdiv"></div>
+<div  class="footerdiv"></div>

@@ -8,15 +8,19 @@
   <div class="navbar-inner">
     <a class="brand" href="index.html"><img src="themes/images/logo.png" alt="RentalKart"/></a>
 	<form class="form-inline navbar-search" >
-		<input id="srchFld" class="srchTxt" type="text"  style="padding-left: 25px;"/>
-		  <select id="productCatagory" class="srchTxt"><!--Options Fetched From Database--></select> 
+		<input id="srchFld" class="srchTxt" type="text" onblur="loadSearchResults()" style="padding-left: 25px;"/>
+		  <select id="productCatagory" class="srchTxt" onchange="loadSearchResults()"><!--Options Fetched From Database--></select> 
 		<input type="button" id="searchButton" class="btn btn-primary" onclick="loadSearchResults()" value="Go"></input>
     </form>
     <ul id="topMenu" class="nav pull-right">
-	 <li class=""><a href="special_offer.html">Specials Offer</a></li>
 	 <li class=""><a href="contact.html">Contact</a></li>
 	 <li class="">
-	 <a href="#login" role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Login</span></a>
+	<div id="loginBtnModel" class="">
+		<a href="#login" role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Login</span></a>
+	</div>
+	<div id="logoutBtnModel" class="hidden"> 
+		<a href="#" onclick="logoutScript()"role="button" style="padding-right:0"><span class="btn btn-large btn-info">Logout</span></a>
+	</div> 
 	<div id="login" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false" >
 		  <div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -25,20 +29,18 @@
 		  <div class="modal-body">
 			<form class="form-horizontal loginFrm">
 			  <div class="control-group">								
-				<input type="text" id="inputEmail" placeholder="Email">
+				<input type="text" id="inputEmail" placeholder="Email" required>
 			  </div>
+			  <div id="errEmailModel"></div>
 			  <div class="control-group">
-				<input type="password" id="inputPassword" placeholder="Password">
+				<input type="password" id="inputPassword" placeholder="Password" required>
 			  </div>
-			  <div class="control-group">
-				<label class="checkbox">
-				<input type="checkbox"> Remember me
-				</label>
-			  </div>
-			</form>		
-			<button type="submit" class="btn btn-success">Sign in</button>
-			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-		  </div>
+			  <div id="errPassModel"></div>
+				
+			<button id="signInBtnModel" style="margin-left: 13px;width: 102px;margin-top: 19px;" onclick="checkLogin();" type="button" class="btn btn-success">Sign in</button>
+			</form>
+			<button class="btn" data-dismiss="modal" aria-hidden="true" style="    width: 110px;margin-left: 122px;margin-top: -68px;">Close</button>
+		</div>
 	</div>
 	</li>
     </ul>

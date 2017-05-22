@@ -56,7 +56,7 @@
 <!-- Sidebar ================================================== -->
 	<div class="sidebardiv"></div>
 <!-- Sidebar end=============================================== -->
-	<div class="span9">
+	<div id="searchResult" class="span9">
     <ul class="breadcrumb">
     <li><a href="index.html">Home</a> <span class="divider">/</span></li>
     <li><a href="products.html">Products</a> <span class="divider">/</span></li>
@@ -97,11 +97,14 @@
 				<hr class="soft"/>
 				<form class="form-horizontal qtyFrm">
 				  <div class="control-group"><!-- DISPLAY PRICE In 3 Formats-->
-					<label class="control-label"><small>Hourly:</small>&#8377;<span id="priceHour"></span></label>
+					<label class="control-label"><small>Hourly:</small>Rs<span id="priceHour"></span></label>
+					<!--&#8377; Rupee Code
 					<label class="control-label"><small>Daily:</small>&#8377;<span id="priceDay"></span></label>
 					<label class="control-label"><small>Weakly:</small>&#8377;<span id="priceWeak"></span></label>
+					-->
 					<div class="controls">
-					  <button type="submit" class="btn btn-large btn-primary pull-right"> Add to cart <i class="icon-shopping-cart"></i></button>
+					  <input type="hidden" id="k_pid" value="11">
+					  <button type="button" name="kartItem" id="kartItem" onclick="aaddToKart();"class="btn btn-large btn-primary pull-right"> Add to cart <i class="icon-shopping-cart"></i></button>
 					</div>
 				  </div>
 				</form>

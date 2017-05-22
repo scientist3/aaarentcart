@@ -1,0 +1,15 @@
+.err{
+	margin: .5em 0;
+    display: block;
+    color: #dd4b39;
+    line-height: 17px;
+	margin-left: 180px;
+}
+.success{
+	margin: .5em 0;
+    display: block;
+    color: #60c052;
+    line-height: 17px;
+	margin-left: 180px;
+}
+

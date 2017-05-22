@@ -1,8 +1,10 @@
 <?php
 	session_start();
 	// Database Conection Variables
-	//$_SESSION['user']="";
+	//$_SESSION['user']="Aamir";
+	//$_SESSION['admin']="admin";
 	//session_unset();
+	
 	$host="127.0.0.1";
 	$dbUsername="rentalkart";
 	$dbPassword="rentalkart";
@@ -13,136 +15,128 @@
 		die("Connection Failed");
 	}
 
-// If User Details Is Needed
-if(isset($_REQUEST['userName'])){
+// Check Whether User Signed In
+if(isset($_REQUEST['logedIn'])){
 	if(isset($_SESSION['user'])){
-		echo'<div id="welcomeLine" class="row">
-				<div class="span6">Welcome! 
-				  <strong>
-					<span id="userNameDiv" class="userNameDiv">'.$_SESSION["user"].'</span>
-				  </strong>
-				</div>
-				<div class="span6"></div>
-			</div>';
+		echo'{"logedIn":"'.$_SESSION['username'].'"}';
 	}
 	else{
-		echo'<div id="welcomeLine" class="row">
-				<div class="span6">Welcome! 
-				  <strong>
-					<span id="userNameDiv" class="userNameDiv">Guesttt</span>
-				  </strong>
-				</div>
-				<div class="span6"></div>
-			</div>';
+		echo'{"logedIn":"0"}';
+	}	
+}
+
+// Check Whether Admin Signed In
+if(isset($_REQUEST['AdminlogedIn'])){
+	if(isset($_SESSION['admin'])){
+		echo'{"logedIn":"'.$_SESSION['admin'].'"}';
+	}
+	else{
+		echo'{"logedIn":"0"}';
+	}	
+}
+
+// Check Whether User[Email]&[Password] Is Valid [y/n]
+if(isset($_REQUEST['signInCheck'])){
+	$email=$_REQUEST['email'];
+	$pass=$_REQUEST['pass'];
+	//echo"Hi [".$email."][".$pass."]";
+	$sql = "SELECT `cust_id`,`username`,`cust_email`,`cust_password` FROM `customer_registration` WHERE cust_email=\"".$email."\" and cust_password=md5(".$pass.")";
+	if($query_rundis = mysqli_query($con,$sql))	{
+		$row=mysqli_fetch_array($query_rundis);
+		if($row['cust_email']==$email && $row['cust_password']==md5($pass))
+		{	
+			echo'{"sucess":"1","remail":"Welcome '.$email.'","rpass":"Password Matched '.$pass.'"}';
+			$_SESSION['user']=$row['cust_id'];
+			$_SESSION['username']=$row['username'];
+			
+		}
+		else{	
+			echo'{ "sucess":"0","remail":"Worng EmailId","rpass":"Wrong Password"}';
+		}
+	}else{	
+		echo'{"sucess":"0","remail":"Worng EmailId","rpass":"Wrong Password"}';
+	}
+}
+
+
+// Check Whether Admin username and Password Is Valid [y/n]
+if(isset($_REQUEST['signInCheckAdmin'])){
+	$email=$_REQUEST['email'];
+	$pass=$_REQUEST['pass'];
+	//echo"Hi [".$email."][".$pass."]";
+	//$sql = "SELECT `admin_id`,`username`,`password` FROM `admin` WHERE username=\"".$email."\" and password=md5(".$pass.")";
+	$sql = "SELECT * FROM `admin` WHERE username='".$email."' AND password=md5('".$pass."')";
+	if($query_rundis = mysqli_query($con,$sql))	{
+		$row=mysqli_fetch_array($query_rundis);
+		if($row['username']==$email && $row['password']==md5($pass))
+		{	
+			echo'{"sucess":"1","remail":"Welcome '.$email.'","rpass":"Password Matched '.$pass.'"}';
+			$_SESSION['admin']=$row['username'];
+			
+		}
+		else{	
+			echo'{ "sucess":"0","remail":"Worng Username","rpass":"Wrong Password"}';
+		}
+	}else{	
+		echo'{"sucess":"0","remail":"Worng EmailId","rpass":"Wrong Password"}';
 	}
 }
 	
-// If Product Detail Is Uploaded
-if (isset($_REQUEST['pTitle'])){	
+// If User Details Is Needed
+if(isset($_REQUEST['userName'])){
+	if(isset($_SESSION['user'])){
+		echo $_SESSION["user"];
+	}
+	else{
+		echo'Guest';
+	}
+}
+	
+// If Product Detail Is Uploaded---error
+if (isset($_REQUEST['pTitleERRRRR'])){	
 	//echo"Sucessfull-".$_POST['pTitle'];
+	/*$pTitle=$_POST['pTitle'];
+	$pSDesc=$_POST['pSDesc'];
+	$pPriceD=$_POST['pPriceD'];
+	$pFDesc=$_POST['pFDesc'];
+	$pBrand=$_POST['pBrand'];
+	$pModel=$_POST['pModel'];
+	$pSizeDim=$_POST['pSizeDim'];
+	$pOther=$_POST['pOther'];*/
+	echo'Recieved';
+}
+// If Product Detail Is Uploaded
+if (isset($_REQUEST['uploadProduct'])){	
+	echo'Recieved';
 	$pTitle=$_POST['pTitle'];
 	$pSDesc=$_POST['pSDesc'];
-	$pPriceH=$_POST['pPriceH'];
 	$pPriceD=$_POST['pPriceD'];
-	$pPriceW=$_POST['pPriceW'];
 	$pFDesc=$_POST['pFDesc'];
 	$pBrand=$_POST['pBrand'];
 	$pModel=$_POST['pModel'];
 	$pSizeDim=$_POST['pSizeDim'];
 	$pOther=$_POST['pOther'];
+	echo'Data='.$pTitle.$pSDesc.$pPriceD.$pFDesc.$pBrand.$pModel.$pSizeDim.$pOther;
+	if($_FILES['mainpic']['type']!="application/pdf")
+	{
+		echo'Not PDF File';
+	}else{
+		$notifi_file_name=$_FILES['mainpic']['name']; // Stores actual image File Name 
+								
+		$temp=explode(".",$notifi_file_name);
+		$temp=end($temp);
+		$temp=".".$temp;
+		$notifi_file_name=time().$temp; // Stores created image File Name 
+		$copy=$notifi_file_name;
+		$notifi_file_name="documents/".$notifi_file_name;
+		move_uploaded_file($_FILES['mat_file']['tmp_name'],"documents/".$copy);
+	}
 	
-	
-	echo'<div class="span9">
-		  <div class="well"><h4><center>Uploaded Product Details</center></h4></div>
-			<div class="row">	  
-			<div id="gallery" class="span3">
-            <a href="themes/images/products/large/f1.jpg" title="Fujifilm FinePix S2950 Digital Camera">
-				<img src="themes/images/products/large/3.jpg" style="width:100%" alt="Fujifilm FinePix S2950 Digital Camera"/>
-            </a>
-			<div id="differentview" class="moreOptopm carousel slide">
-                <div class="carousel-inner">
-                  <div class="item active">
-                   <a href="themes/images/products/large/f1.jpg"> <img style="width:29%" src="themes/images/products/large/f1.jpg" alt=""/></a>
-                   <a href="themes/images/products/large/f2.jpg"> <img style="width:29%" src="themes/images/products/large/f2.jpg" alt=""/></a>
-                   <a href="themes/images/products/large/f3.jpg" > <img style="width:29%" src="themes/images/products/large/f3.jpg" alt=""/></a>
-                  </div>
-                  <div class="item">
-                   <a href="themes/images/products/large/f3.jpg" > <img style="width:29%" src="themes/images/products/large/f3.jpg" alt=""/></a>
-                   <a href="themes/images/products/large/f1.jpg"> <img style="width:29%" src="themes/images/products/large/f1.jpg" alt=""/></a>
-                   <a href="themes/images/products/large/f2.jpg"> <img style="width:29%" src="themes/images/products/large/f2.jpg" alt=""/></a>
-                  </div>
-                </div>
-              <!--  
-			  <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
-              <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a> 
-			  -->
-              </div>
-			  
-			 <div class="btn-toolbar">
-			  <div class="btn-group">
-				<span class="btn" ><i class="icon-zoom-in"></i></span>
-				<span class="btn" ><i class="icon-thumbs-up"></i></span>
-				<span class="btn" ><i class="icon-thumbs-down"></i></span>
-			  </div>
-			</div>
-			</div>
-			<div class="span6">
-				<h3>'.$pTitle.'</h3>
-				<small>- '.$pSDesc.'</small>
-				<hr class="soft"/>
-				<form class="form-horizontal qtyFrm">
-				  <div class="control-group"><!-- DISPLAY PRICE In 3 Formats-->
-					<label class="control-label">Hourly : <span>'.$pPriceH.'</span></label>
-					<label class="control-label">Daily : <span>'.$pPriceD.'</span></label>
-					<label class="control-label">Weakly : <span>'.$pPriceW.'</span></label>
-					<div class="controls">
-					  <button type="submit" class="btn btn-large btn-primary pull-right"> Add to cart <i class="icon-shopping-cart"></i></button>
-					</div>
-				  </div>
-				</form>
-				
-				<hr class="soft clr"/>
-				<p>'.$pFDesc.'</p>
-				<a class="btn btn-small pull-right" href="#detail">More Details</a>
-				<br class="clr"/>
-			<a href="#" name="detail"></a>
-			<hr class="soft"/>
-			</div>
-			
-			<div class="span9">
-            <ul id="productDetail" class="nav nav-tabs">
-              <li class="active"><a href="#home" data-toggle="tab">Product Details</a></li>
-              <li><a href="#profile" data-toggle="tab">Related Products</a></li>
-            </ul>
-            <div id="myTabContent" class="tab-content">
-              <div class="tab-pane fade active in" id="home">
-			  <h4>Product Information</h4>
-                <table class="table table-bordered">
-				<tbody>
-				<tr class="techSpecRow"><th colspan="2">Product Details</th></tr>
-				<tr class="techSpecRow"><td class="techSpecTD1">Brand: </td><td class="techSpecTD2">'.$pBrand.'</td></tr>
-				<tr class="techSpecRow"><td class="techSpecTD1">Model:</td><td class="techSpecTD2">'.$pModel.'</td></tr>
-				<tr class="techSpecRow"><td class="techSpecTD1">Dimensions:</td><td class="techSpecTD2">'.$pSizeDim.'</td></tr>
-				<tr class="techSpecRow"><td class="techSpecTD1">Other Details:</td><td class="techSpecTD2">'.$pOther .'</td></tr>
-				</tbody>
-				</table>
-              </div>
-			  
-			  <div class="tab-pane fade in" id="profile">
-			  <h4>Related Product</h4>
-					<div class="well">Not Implemented Yet</div>
-              </div>
-		</div>
-          </div>
-
-		</div>
-	</div>';
 }
-
 // [Block Wise]Fetch Latest Products
 if(isset($_REQUEST['latestProducts'])){
 	
-	$sql = "SELECT p_id,p_title, p_s_desc, p_price_h,p_pic FROM `products` ORDER BY p_title ASC";
+	$sql = "SELECT p_id,p_title, p_s_desc, p_price_d,p_pic FROM `products` WHERE valid=1  ORDER BY p_title ASC";
 	if($query_rundis = mysqli_query($con,$sql))	{
 		$_SESSION['Available']=mysqli_num_rows($query_rundis);
 		echo'<ul class="thumbnails">';	
@@ -154,7 +148,7 @@ if(isset($_REQUEST['latestProducts'])){
 					echo'<div class="caption">';
 						echo'<h5>'.substr($row['p_title'],0,30).'...</h5>';
 						  echo'<p>'.substr($row['p_s_desc'],0,30).'...</p>';
-						  echo'<h4 style="text-align:center"><a class="btn" href="product_details.html?pid='.$row['p_id'].'"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">'.$row['p_price_h'].'</a></h4>';
+						  echo'<h4 style="text-align:center"><a class="btn" href="product_details.html?pid='.$row['p_id'].'"> <i class="icon-zoom-in"></i></a>  <a class="btn btn-primary" href="#">Rs '.$row['p_price_d'].'</a></h4>';
 					echo'</div>';
 				echo'</div>';
 			echo'</li>';
@@ -168,7 +162,7 @@ if(isset($_REQUEST['latestProducts'])){
 
 // [ListWise] Fetch Latest Products 
 if(isset($_REQUEST['latestProductsList'])){
-	$sql = "SELECT p_id,p_title, p_s_desc, p_f_desc, p_price_d,p_pic FROM `products` ORDER BY p_title ASC";
+	$sql = "SELECT p_id,p_title, p_s_desc, p_f_desc, p_price_d,p_pic FROM `products` WHERE valid=1 ORDER BY p_title ASC";
 	//echo'reached Here';
 	if($query_rundis = mysqli_query($con,$sql))	{
 		$_SESSION['Available']=mysqli_num_rows($query_rundis);
@@ -223,7 +217,7 @@ if(isset($_REQUEST['latestProductsList'])){
 if(isset($_REQUEST['featuredProducts'])){
 	$count=0;// Only Four Item Per Slide
 	//$sql = "SELECT p_id,p_title, p_s_desc, p_price_h,p_pic FROM `products`";
-	$sql = "SELECT p_id,p_title, p_s_desc, p_price_h,p_pic FROM `products` WHERE p_like>1 ORDER BY p_like DESC";
+	$sql = "SELECT p_id,p_title, p_s_desc, p_price_h,p_pic FROM `products` WHERE valid=1 AND p_like>1 ORDER BY p_like DESC";
 	if($query_rundis = mysqli_query($con,$sql))	{
 		echo'<div class="row-fluid">
 			<div id="featured" class="carousel slide">
@@ -266,7 +260,7 @@ if(isset($_REQUEST['featuredProducts'])){
 
 // Fetch Recently Rented
 if(isset($_REQUEST['recentlyRented'])){
-	$sql = "SELECT p_id,p_title, p_s_desc, p_price_h,p_pic FROM `products` WHERE `p_rented`=1 ORDER BY `p_last_rented` DESC";
+	$sql = "SELECT p_id,p_title, p_s_desc, p_price_h,p_pic FROM `products` WHERE valid=1 AND `p_rented`=1 ORDER BY `p_last_rented` DESC";
 	$sql = "SELECT * FROM products,catagory WHERE products.p_catagory=catagory.c_id";
 }
 
@@ -283,6 +277,61 @@ if(isset($_REQUEST['productCatagory'])){
 	}
 }
 
+// Fetch Catagory For SideBar
+if(isset($_REQUEST['productCatagorySideBar'])){
+	// Fetched All Details From Catagory 
+	$sql = "SELECT * FROM catagory";
+	/*
+	
+				
+				<li><a class="active" href="products.html"><i class="icon-chevron-right"></i>Cameras (100) </a></li>
+				<li><a href="products.html"><i class="icon-chevron-right"></i>Computers, Tablets & laptop (30)</a></li>
+				<li><a href="products.html"><i class="icon-chevron-right"></i>Mobile Phone (80)</a></li>
+				<li><a href="products.html"><i class="icon-chevron-right"></i>Sound & Vision (15)</a></li>
+				
+			
+	*/
+	if($query_rundis = mysqli_query($con,$sql))	{
+		$flag=0;
+		$flag2=0;
+		while($row=mysqli_fetch_array($query_rundis)){
+			if($flag==0){
+				echo'<li class="subMenu open"><a> '.$row['c_title'].'</a>';
+				$flag=1;
+			}else{
+				echo'<li class="subMenu"><a> '.$row['c_title'].' </a>';
+			}
+			///SubCatagory Values
+			// Fetched All Details Of SubCatagory Where its c_id= c_id of catagory
+			$sql = "SELECT *FROM `subcatagory` WHERE `subcatagory`.c_id=".$row['c_id'];
+			if($query_rundis1 = mysqli_query($con,$sql)){
+				$flag1=0;
+				if($flag2==0){
+					echo'<ul>';
+					$flag2=1;
+				}
+				else{
+					echo'<ul style="display:none">';
+				}
+				while($row1=mysqli_fetch_array($query_rundis1)){
+					if($flag1==0){
+						echo'<li><a class="active" href="products.html"><i class="icon-chevron-right"></i>'.$row1['sc_title'].' </a></li>';
+						$flag=1;
+					}else{
+						echo'<li><a class="" href="products.html"><i class="icon-chevron-right"></i>'.$row1['sc_title'].' </a></li>';
+					}
+				}
+				echo'</ul>';
+			}else{
+				echo'No SubCategory Retrieved';
+			}
+		}
+		echo'</li>';
+	}else{
+		echo'No Catagory Retrieved';
+	}
+}
+
 // Fetch Search Results
 if(isset($_REQUEST['searchResults'])){
 	$s=$_REQUEST['s'];
@@ -292,9 +341,9 @@ if(isset($_REQUEST['searchResults'])){
 			<li class="active">Best Matched Products</li>
 		</ul>';
 	if($c==1){
-		$sql = "SELECT * FROM products WHERE p_title LIKE '%$s%'";
+		$sql = "SELECT * FROM products WHERE valid=1 AND p_title LIKE '%$s%'";
 	}else{
-		$sql = "SELECT * FROM products WHERE p_catagory=$c AND p_title LIKE '%$s%'";
+		$sql = "SELECT * FROM products WHERE valid=1 AND p_catagory=$c AND p_title LIKE '%$s%'";
 	}
 	//echo$sql;
 	if($query_rundis = mysqli_query($con,$sql))	{
@@ -371,7 +420,7 @@ if(isset($_REQUEST['searchResults'])){
 
 // Fetch Product Details
 if(isset($_REQUEST['productId'])){
-	$sql = "SELECT * FROM `products` WHERE p_id=".$_REQUEST['productId'];
+	$sql = "SELECT * FROM `products` WHERE valid=1 AND p_id=".$_REQUEST['productId'];
 	//echo"Reached ".$_REQUEST['productId'];
 	if($query_rundis = mysqli_query($con,$sql))	{
 		$row=mysqli_fetch_assoc($query_rundis);
@@ -418,7 +467,7 @@ if(isset($_REQUEST['productId'])){
 
 // Fetch All Products Data for products.html page
 if(isset($_REQUEST['allProducts'])){
-	$sql = "SELECT * FROM `products` LIMIT 0,10";
+	$sql = "SELECT * FROM `products` WHERE valid=1 LIMIT 0,10";
 }
 
 // [Block Wise] Sorted Fetch All Products Data for products.html page
@@ -427,7 +476,7 @@ if(isset($_REQUEST['sortBy'])){
 	$sql =getSql($val);
 	//echo"Sorted Result [".$val."]";
 	// Cancelled For A While
-	if($query_rundis = mysqli_query($con,$sql))	{
+	/*if($query_rundis = mysqli_query($con,$sql))	{
 		$res='[';
 		$count=0;
 		$last=mysqli_num_rows($query_rundis)-1;
@@ -442,8 +491,8 @@ if(isset($_REQUEST['sortBy'])){
 		}
 		$res=$res."]";
 		echo $res;
-	}	
-	/*if($query_rundis = mysqli_query($con,$sql))	{
+	}*/	
+	if($query_rundis = mysqli_query($con,$sql))	{
 		echo'<ul class="thumbnails">';
 		$_SESSION['Available']=mysqli_num_rows($query_rundis);
 		while($row=mysqli_fetch_array($query_rundis)){
@@ -454,7 +503,7 @@ if(isset($_REQUEST['sortBy'])){
 					echo'<div class="caption">';
 						echo'<h5>'.substr($row['p_title'],0,30).'...</h5>';
 						  echo'<p>'.substr($row['p_s_desc'],0,30).'...</p>';
-						  echo'<h4 style="text-align:center"><a class="btn" href="product_details.html?pid='.$row['p_id'].'"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">'.$row['p_price_h'].'</a></h4>';
+						  echo'<h4 style="text-align:center"><a class="btn" href="product_details.html?pid='.$row['p_id'].'"> <i class="icon-zoom-in"></i></a>  <a class="btn btn-primary" href="#">Rs '.$row['p_price_d'].'</a></h4>';
 					echo'</div>';
 				echo'</div>';
 			echo'</li>';
@@ -462,7 +511,7 @@ if(isset($_REQUEST['sortBy'])){
 		echo'</ul>';
 	}else{
 		echo'<div class="well">No Item Returned</div>';
-	}*/
+	}
 
 	
 	/*echo'
@@ -513,45 +562,277 @@ function getSql($sortBy){
 	$sql="";
 	switch($sortBy){
 		case "az":
-			$sql = "SELECT * FROM `products` ORDER BY `products`.`p_title` ASC";
+			$sql = "SELECT * FROM `products` WHERE valid=1 ORDER BY `products`.`p_title` ASC";
 			break;
 		case "za":
-			$sql = "SELECT * FROM `products` ORDER BY `products`.`p_title` DESC";
+			$sql = "SELECT * FROM `products` WHERE valid=1 ORDER BY `products`.`p_title` DESC";
 			break;
 		case "plt":
-			$sql = "SELECT * FROM `products` ORDER BY `products`.`p_like` DESC";
+			$sql = "SELECT * FROM `products` WHERE valid=1 ORDER BY `products`.`p_like` DESC";
 			break;
 		case "plf":
-			$sql = "SELECT * FROM `products` ORDER BY `products`.`p_price_d` ASC";
+			$sql = "SELECT * FROM `products` WHERE valid=1 ORDER BY `products`.`p_price_d` ASC";
 			break;
 		case "phf":
-			$sql = "SELECT * FROM `products` ORDER BY `products`.`p_price_d` DESC";
+			$sql = "SELECT * FROM `products` WHERE valid=1 ORDER BY `products`.`p_price_d` DESC";
 			break;
 	}
 	return $sql;
 }
+
 // Return the Total Number Of Rows From Last Query
 if(isset($_REQUEST['productFetched'])){
 	echo $_SESSION['Available'];
 }
 
 // Check Whether User[Email]&[Password] Is Valid [y/n]
-if(isset($_REQUEST['signInCheck'])){
-	$email=$_REQUEST['email'];
+if(isset($_REQUEST['signIn'])){
+	$email=$trim($_REQUEST['email']);
 	$pass=$_REQUEST['pass'];
 	//echo"Hi [".$email."][".$pass."]";
-	$sql = "SELECT `cust_email`,`cust_password` FROM `customer_registration` WHERE cust_email=\"".$email."\" and cust_password=md5(".$pass.")";
+	$sql = "SELECT `cust_id`,`cust_email`,`cust_password` FROM `customer_registration` WHERE cust_email=\"".$email."\" and cust_password=md5(".$pass.")";
 	if($query_rundis = mysqli_query($con,$sql))	{
 		$row=mysqli_fetch_array($query_rundis);
 		if($row['cust_email']==$email && $row['cust_password']==md5($pass))
 		{	
-			echo'{"remail":"Welcome '.$email.'","rpass":"Password Matched '.$pass.'"}';
+			echo'{"sucess":"1","remail":"Welcome '.$email.'","rpass":"Password Matched '.$pass.'"}';
+			$_SESSION['user']=$row['cust_id'];
+			
 		}
 		else{	
-			echo'{"remail":"Worng EmailId","rpass":"Wrong Password"}';
+			echo'{"sucess":"0","remail":"Worng EmailId","rpass":"Wrong Password"}';
 		}
 	}else{	
-		echo'{"remail":"Worng EmailId","rpass":"Wrong Password"}';
+		echo'{"sucess":"0","remail":"Worng EmailId","rpass":"Wrong Password"}';
 	}
+}
+
+
+// Save User Details Into Customer Table
+if(isset($_REQUEST['registationForm'])){
+	echo'Data Reached To Server:';
+	$fn=$_POST['RfName'];
+	$ln=$_POST['RlName'];
+	$em=$_POST['Remail'];
+	$um=$_POST['Rusername'];
+	$pwd=$_POST['Rpass'];
+	$dob=$_POST['Rdob'];
+	$cmpny=$_POST['Rcompany'];
+	$adr1=$_POST['RadressL1'];
+	$adr2=$_POST['RadressL2'];
+	$cty=$_POST['Rcity'];
+	$state=$_POST['Rstate'];
+	$zip=$_POST['RpCode'];
+	$cntry=$_POST['Rcountry'];
+	$mobile=$_POST['Rmobile'];	
+	//echo $em;
+	$sql = "INSERT INTO `db_rentalkart`.`customer_registration` 
+		   (`cust_id`, `username`,`cust_password`, `cust_email`, `cust_fname`, `cust_lname`, `cust_address`, `cust_city`, `cust_state`, `cust_pincode`, `cust_country`, `cust_contactno`, `cust_dob`, `cust_adhar_number`) 
+	VALUES (NULL, '".$um."',MD5('".$pwd."'), '".$em."', '".$fn."', '".$ln."', '".$adr1."', '".$cty."', '".$state."', '".$zip."', '".$cntry."', '".$mobile."', '".$dob."', '1245789865321478');";
+	
+	if($query_rundis = mysqli_query($con,$sql))	{
+		echo'Sucess';
+		header("location:login.html");
+	}
+	else{
+		echo'failed';
+	}
+}
+
+// When User Clicks On Add To Cart Button
+if(isset($_REQUEST['addToKart'])){
+	$user=$_SESSION['user'];
+	$from=$user;
+	$for="";
+	$msg="I Need This Product. You May Contact On This Number";
+	$pid =$_REQUEST['addToKart'];
+	//echo $user." ".$pid;
+	// First Check Whether This Product Is Already Added To Kart Or Not
+	$flag=0;
+	$sql = "SELECT * FROM `kart` WHERE rented=0 AND`k_pid` = ".$pid." AND `k_cust_id` = ".$user;
+	if($query_rundis = mysqli_query($con,$sql))	{
+		if(mysqli_num_rows($query_rundis)!=0){
+			$flag=1;
+		}
+	}
+	// If This Product Its Own Product
+	$sql = "SELECT user_id FROM `products` WHERE valid=1 AND p_id=".$pid;
+	$row=mysqli_fetch_array(mysqli_query($con,$sql));
+	$for=$row[0];
+	if($row[0]==$user){
+		echo'Cannot Add Your Own Products';
+		exit();
+	}
+	if(!$flag){// if Not In Kart Already
+		$sql = "INSERT INTO `db_rentalkart`.`kart` (`kart_id`, `k_pid`, `k_cust_id`) VALUES (NULL, '".$pid."','".$user."');";
+		if($query_rundis = mysqli_query($con,$sql))	{
+			echo'Added To Cart';
+			//header("location:user.php");
+			/// Insert Msg To Message Table
+			$sql = "INSERT INTO `db_rentalkart`.`message` (`msg_id`, `msg_content`, `msg_for`, `msg_from`, `msg_product_id`) VALUES (NULL,'".$msg."', ".$for.", ".$from.", ".$pid.");";
+			$query_rundis = mysqli_query($con,$sql);
+		}
+		else{
+			echo'Failed To Add To cart';
+		}
+	}else{
+		echo'This Item Is Already In Ur Kart';
+	}
+}
+
+//Check Username Taken or Not
+if(isset($_REQUEST['takenUsername'])){
+	$un=$_REQUEST['un'];
+	//echo $un;
+	//$sql = "SELECT * FROM `customer_registration` WHERE `username` LIKE \'%sc%\'
+	$sql = "SELECT * FROM `customer_registration` WHERE `username` LIKE '".$un."'";
+	$flag=0;
+	if($query_rundis = mysqli_query($con,$sql))	{
+		while($row=mysqli_fetch_array($query_rundis)){
+			if($row['username']==$un){
+				$flag=1;
+			}
+		}
+		if($flag==0){
+			echo'{"error":"0","errDesc":"You Choose Unique Username"}';
+		}else{
+			echo'{"error":"1","errDesc":"Chose Other Username. Error Code [takenUsername]"}';
+		}
+		
+	}else{
+		//echo'Error In Reteriving Data From Data Base. Error Code [takenUsername] ';
+		echo'{"error":"1","errDesc":"Error In Reteriving Data From Data Base. Error Code [takenUsername]"}';
+	}
+}
+
+// Logout Check
+if(isset($_REQUEST['logoutBtn'])){
+	session_unset();
+	//header('location:login.html');
+	echo'{"logout":"1"}';
+}
+// Logout Check ADmin
+if(isset($_REQUEST['logoutBtnAdmin'])){
+	//session_unset();
+	//$_SESSION['admin']="";
+	unset($_SESSION['admin']);
+	//header('location:login.html');
+	echo'{"logout":"1"}';
+}
+
+// Total Kart Items
+if(isset($_REQUEST['totalKartItems'])){
+	$custId=$_SESSION['user'];
+	$sql = "SELECT * FROM `kart` WHERE `k_cust_id` = ".$custId." AND `rented` = 0";
+	if($query_rundis = mysqli_query($con,$sql))	{
+		//header("location:user.php");
+		$totalKartItems=mysqli_num_rows($query_rundis);
+		echo $totalKartItems;
+	}else{
+		echo'Failed To Search Into Kart Table';
+	}
+}
+
+//  Karted Items Details product_summary page
+if(isset($_REQUEST['kartItem'])){
+	$custId=$_SESSION['user'];                                      //rented=0
+	$sql = "SELECT * FROM `kart` WHERE `k_cust_id` = ".$custId." AND `rented` = 0";
+	if($query_rundis = mysqli_query($con,$sql))	{
+		while($row=mysqli_fetch_array($query_rundis)){// To Get product_id
+			$piid=$row['k_pid'];
+			$sql = "SELECT * FROM `products` WHERE valid=1 AND `p_id`=".$piid;
+			$row1=mysqli_fetch_array(mysqli_query($con,$sql));
+			
+			echo'<tr><!-- Product-->
+					<td> <img width="60" src="'.$row1['p_pic'].'" alt=""/></td>
+					<td>'.$row1['p_title'].'<br/>'.$row1['p_s_desc'].'</td>
+					<td>Rs '.$row1['p_price_d'].'</td>
+					<td>
+						<a class="well well-small" role="button" href="product_details.html?pid='.$row1['p_id'].'">Detail</a>
+					</td>
+					<td>
+						<a class="well well-small" role="button" href="ownerInfo.php?owner='.$row1['user_id'].'">Contact</a>
+					</td>
+					<td>
+					<a class="well well-small" role="button" href="#" onclick="alert(\'Sent\');" name="requestBtn" id="requestBtn">Request</a>
+					</td>
+					<td>'.$row['rented'].'</td>
+			</tr>';
+		}// To Get Product_Id End
+	}else{
+		echo'Failed To Get Details From Kart Table';
+	}
+}
+
+//  Price Of All Karted Items
+if(isset($_REQUEST['totalItemsInKartPrice'])){
+	$custId=$_SESSION['user'];
+	$sql = "SELECT * FROM `kart` WHERE `k_cust_id` = ".$custId." AND `rented` = 0";
+	if($query_rundis = mysqli_query($con,$sql))	{
+		$totalPrice="";
+		while($row=mysqli_fetch_array($query_rundis)){// To Get product_id
+			$piid=$row['k_pid'];
+			$sql = "SELECT * FROM `products` WHERE valid=1 AND `p_id`=".$piid;
+			$row1=mysqli_fetch_array(mysqli_query($con,$sql));
+			$totalPrice+=$row1['p_price_d'];
+			
+		}// To Get Product_Id End
+		echo $totalPrice;
+	}else{
+		echo'Failed To Get Details From Kart Table';
+	}
+}
+
+// Approve User 
+if(isset($_REQUEST['approveUser'])){
+	$cust_id=$_REQUEST['id'];
+	//$sql = "UPDATE `customer_registration` SET `valid` = \'1\' WHERE `cust_id` =".$cust_id;
+	$sql = "UPDATE `db_rentalkart`.`customer_registration` SET `valid` = 1 WHERE `customer_registration`.`cust_id` = ".$cust_id.";";
+	if(mysqli_query($con,$sql)){echo'{"sucess":"1"}';}else{echo'{"sucess":"0"}';}
+	
+}
+
+// Approve Product 
+if(isset($_REQUEST['approveProduct'])){
+	$p_id=$_REQUEST['id'];
+	//$sql = "UPDATE `customer_registration` SET `valid` = \'1\' WHERE `cust_id` =".$cust_id;
+	//$sql = "UPDATE `db_rentalkart`.`customer_registration` SET `valid` = 1 WHERE `customer_registration`.`cust_id` = ".$cust_id.";";
+	$sql = "UPDATE `db_rentalkart`.`products` SET `valid` = 1 WHERE `products`.`p_id` = ".$p_id.";";
+	if(mysqli_query($con,$sql)){echo'{"sucess":"1"}';}else{echo'{"sucess":"0"}';}
+	
+}
+
+//// Updte Kart
+if(isset($_REQUEST['updateKart'])){
+	$cId=$_REQUEST['custId'];
+	$pId=$_REQUEST['pId'];//custId="+userId+"&pId="+p
+	$sql = "UPDATE `kart` SET `rented`=1 WHERE `k_pid`=".$pId." AND `k_cust_id`=".$cId;
+	if(mysqli_query($con,$sql)){echo'{"sucess":"1"}';}else{echo'{"sucess":"0"}';}
+	
+}
+//// Updte Product
+if(isset($_REQUEST['updateProduct'])){
+	$pId=$_REQUEST['pId'];//custId="+userId+"&pId="+p
+	$rentedTo=$_REQUEST['rentedTo'];
+	$sql = "UPDATE `products` SET `p_rented`=1, `p_rented_to`=".$rentedTo." WHERE `p_id`=".$pId;
+	if(mysqli_query($con,$sql)){echo'{"sucess":"1"}';}else{echo'{"sucess":"0"}';}
+	
+}
+
+//yes btn 
+//// Updte Product
+if(isset($_REQUEST['updateProduct1'])){
+	$pId=$_REQUEST['pId'];//custId="+userId+"&pId="+p
+	
+	$sql = "UPDATE `products` SET `p_rented`=0 WHERE `p_id`=".$pId;
+	if(mysqli_query($con,$sql)){echo'{"sucess":"1"}';}else{echo'{"sucess":"0"}';}
+	
+}
+//// Delete Msg 
+if(isset($_REQUEST['deleteMsg'])){
+	$msgId=$_REQUEST['msgId'];//custId="+userId+"&pId="+p
+	$sql = "DELETE FROM `message` WHERE `msg_id`=".$msgId;
+	if(mysqli_query($con,$sql)){echo'{"sucess":"1"}';}else{echo'{"sucess":"0"}';}
+	
 }
 ?>

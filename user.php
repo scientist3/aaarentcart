@@ -1,8 +1,11 @@
+<?php session_start();
+	//$_SESSION[]="";
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Online Rental Kart</title>
+    <title>Rental Kart</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -33,7 +36,8 @@
 	<!-- Jquery -->
 	<script src="bootstrap/jquery/jquery.min.js" type="text/javascript"></script>
 	<script src="bootstrap/js/headSidebarFooter.js" type="text/javascript"></script>
-</head>
+	
+  </head>
 <body>
 <!-- Header Start =============================================== -->
 <div id="header">
@@ -44,71 +48,64 @@
 	</div>
 </div>
 <!-- Header End=================================================== -->
-<!-- Header End====================================================================== -->
 <div id="mainBody">
-<div id="searchResult" class="container">
-	<hr class="soften">
-	<h1>Visit us</h1>
-	<hr class="soften"/>	
+  <div class="container">
 	<div class="row">
-		
-		<div class="span4">
-		<h4>Contact Details</h4>
-		<p>	Safapora,<br/> Ganderbal , J&K
-			<br/><br/>
-			rentalkart00@gmail.com<br/>
-			﻿Tel 123-456-6780<br/>
-			Fax 123-456-5679<br/>
-			web:scientist.wordpress.com
-		</p>		
-		</div>
-			
-		<div class="span4">
-		<h4>Opening Hours</h4>
-			<h5> Monday - Friday</h5>
-			<p>09:00am - 09:00pm<br/><br/></p>
-			<h5>Saturday</h5>
-			<p>09:00am - 07:00pm<br/><br/></p>
-			<h5>Sunday</h5>
-			<p>12:30pm - 06:00pm<br/><br/></p>
-		</div>
-		<div class="span4">
-		<h4>Email Us</h4>
-		<form class="form-horizontal" action="mailto:ksaak33@gmail.com">
-        <fieldset>
-          <div class="control-group">
-           
-              <input type="text" placeholder="Name" class="input-xlarge"/>
-           
-          </div>
-		   <div class="control-group">
-           
-              <input type="text" placeholder="Email" class="input-xlarge"/>
-           
-          </div>
-		   <div class="control-group">
-           
-              <input type="text" placeholder="Subject" class="input-xlarge"/>
-          
-          </div>
-          <div class="control-group">
-              <textarea rows="3" id="textarea" class="input-xlarge"></textarea>
-           
-          </div>
-
-            <button class="btn btn-large" type="submit">Send Messages</button>
-
-        </fieldset>
-      </form>
+	<!-- Sidebar ================================================== -->
+		<div class="sidebardiv"></div>
+		<div id="rowContainer" class="span9">
+			<ul class="breadcrumb">
+				<li><a href="index.html">Home</a> <span class="divider">/</span></li>
+				<li class="active">User</li>
+			</ul>
+			<?php 
+				if(isset($_SESSION['user'])){ 
+					echo"<h3> User Loged [".$_SESSION['username']."]";
+					echo'<form  method="post" action="#"><input type="submit" name="LogoutBtn" value="Logout"></form></h3>';
+					if(isset($_POST['LogoutBtn']))
+					{
+						session_unset();
+						header('location:login.html');
+					}
+				}else{ 
+					echo"Not SET SESSION";
+					header('location:login.html');
+				}
+				
+			?>
+				
+			<?php
+				$host="127.0.0.1";
+				$dbUsername="rentalkart";
+				$dbPassword="rentalkart";
+				$dbName="db_rentalkart";
+				$con=mysqli_connect($host,$dbUsername,$dbPassword,$dbName);
+				if(!$con)
+				{
+					die("Connection Failed");
+				}
+				
+				//$sql = "SELECT * FROM `kart` LIMIT 0, 30 ";
+				$sql = "SELECT * FROM `kart` WHERE `k_cust_id` = ".$_SESSION['user'];
+				if($query_rundis = mysqli_query($con,$sql))	{
+					echo'<table border="1"><tr><td>Kart Id</td> <td>Customer Id</td> <td>Product Id</td></tr>';
+					
+					while($row=mysqli_fetch_array($query_rundis)){
+						echo'<tr>';
+						//echo $row["p_title"];
+						echo "<td>".$row[0]."</td>";
+						echo "<td>".$row[1]."</td>";
+						echo "<td>".$row[2]."</td>";
+						echo'</tr>';
+					}
+					
+					echo'</table>';
+				}
+			?>
+			<hr class="soft"/>		
 		</div>
 	</div>
-	<!--div class="row">
-	<div class="span12">
-	<iframe style="width:100%; height:300; border: 0px" scrolling="no" src="https://maps.google.co.uk/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=18+California,+Fresno,+CA,+United+States&amp;aq=0&amp;oq=18+California+united+state&amp;sll=39.9589,-120.955336&amp;sspn=0.007114,0.016512&amp;ie=UTF8&amp;hq=&amp;hnear=18,+Fresno,+California+93727,+United+States&amp;t=m&amp;ll=36.732762,-119.695787&amp;spn=0.017197,0.100336&amp;z=14&amp;output=embed"></iframe><br />
-	<small><a href="https://maps.google.co.uk/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=18+California,+Fresno,+CA,+United+States&amp;aq=0&amp;oq=18+California+united+state&amp;sll=39.9589,-120.955336&amp;sspn=0.007114,0.016512&amp;ie=UTF8&amp;hq=&amp;hnear=18,+Fresno,+California+93727,+United+States&amp;t=m&amp;ll=36.732762,-119.695787&amp;spn=0.017197,0.100336&amp;z=14" style="color:#0000FF;text-align:left">View Larger Map</a></small>
-	</div>
-	</div>
-	</div-->
+  </div>
 </div>
 <!-- MainBody End ============================= -->
 <!-- Footer ================================================================== -->
